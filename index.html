@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fliptravel — aviachiptalar Telegramda</title>
+<meta name="description" content="Fliptravel — Toshkentdagi rasmiy aviakassa. Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi aviachiptalarni yuboradi.">
+<meta name="theme-color" content="#081120">
+<meta property="og:title" content="Fliptravel — aviachiptalar Telegramda">
+<meta property="og:description" content="Dunyoning istalgan nuqtasiga — bitta xabar bilan. Rasmiy aviakassa, 5 daqiqada javob.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/logo.png">
+<link rel="icon" type="image/png" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#081120; --bg-deep:#060D19; --card:#10213A;
+  --ink:#EAF2FC; --muted:#9FB3CC; --dim:#66799A; --faint:#3D4F6B;
+  --accent:#FFB43A; --accent-glow:rgba(255,180,58,.45);
+  --cyan:#38BDF8; --lcyan:#7DD3FC;
+  --line:rgba(159,179,204,.12); --line-soft:rgba(159,179,204,.1);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--cyan);text-decoration:none}
+a:hover{color:var(--lcyan)}
+img{max-width:100%}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.mono{font-family:'JetBrains Mono',monospace}
+.kicker{margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:var(--lcyan);text-transform:uppercase}
+
+@keyframes ftDriftA{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6%,4%,0) scale(1.12)}100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes ftDriftB{0%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-5%,-3%,0) scale(1)}100%{transform:translate3d(0,0,0) scale(1.05)}}
+@keyframes ftPulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.6);opacity:0}100%{transform:scale(2.6);opacity:0}}
+@keyframes ftSunBreath{0%,100%{opacity:.28;transform:translate(-50%,-50%) scale(1)}50%{opacity:.55;transform:translate(-50%,-50%) scale(1.14)}}
+@keyframes ftSunWave{0%{transform:translate(-50%,-50%) scale(.45);opacity:0}12%{opacity:.42}100%{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+
+/* ============ HEADER ============ */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
+.site-header.scrolled{background:rgba(8,17,32,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.header-in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand-icon{position:relative;display:inline-flex;flex:none}
+.brand-icon::before{content:"";position:absolute;z-index:0;left:70%;top:28%;width:54px;height:54px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,180,90,.5),rgba(255,100,45,.2) 48%,transparent 76%);filter:blur(9px);animation:ftSunBreath 6.5s ease-in-out infinite;pointer-events:none}
+.brand-icon::after{content:"";position:absolute;z-index:0;left:70%;top:28%;width:26px;height:26px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,165,80,.55);box-shadow:0 0 6px rgba(255,130,50,.2);filter:blur(.6px);animation:ftSunWave 4.2s ease-out infinite;pointer-events:none}
+.brand img{position:relative;z-index:1;display:block;height:48px;width:auto;filter:drop-shadow(0 0 1px rgba(234,242,252,.6)) drop-shadow(0 0 6px rgba(150,195,255,.4))}
+.brand-word{font-family:'Quicksand','Manrope',sans-serif;font-weight:700;font-size:23px;letter-spacing:-0.01em;line-height:1}
+.brand-word .bw-a{background:linear-gradient(92deg,#38BDF8,#22D3EE);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--cyan)}
+.mainnav{display:flex;align-items:center;gap:28px}
+.mainnav a{color:var(--muted);font-size:14px;font-weight:500;transition:color .2s}
+.mainnav a:hover{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:10px}
+.lang-group{display:flex;align-items:center;gap:2px;border:1px solid rgba(159,179,204,.18);border-radius:999px;padding:3px}
+.lang-group button{border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 9px;border-radius:999px;background:transparent;color:var(--dim);transition:background .2s,color .2s}
+.lang-group button[aria-pressed="true"]{background:rgba(125,211,252,.16);color:var(--ink)}
+.btn-header{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#1A1204;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:999px;transition:transform .25s var(--ease)}
+.btn-header:hover{transform:translateY(-1px);color:#1A1204}
+@media (max-width:899px){.mainnav,.btn-header{display:none}}
+
+/* ============ FLIGHT PATH ============ */
+.flight-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.flight-layer svg{position:absolute;inset:0;display:block}
+.flight-plane{position:absolute;top:0;left:0;width:26px;height:26px;margin:-13px 0 0 -13px;opacity:0;will-change:transform}
+
+/* ============ HERO ============ */
+.hero{position:relative;z-index:1;min-height:92vh;min-height:92svh;display:flex;align-items:center;overflow:hidden;padding:140px 24px 90px}
+.hero-orbs{position:absolute;inset:0;z-index:0;overflow:hidden}
+.orb-a{position:absolute;top:-25%;left:-15%;width:70%;height:80%;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 65%);filter:blur(10px);animation:ftDriftA 26s ease-in-out infinite}
+.orb-b{position:absolute;bottom:-30%;right:-10%;width:65%;height:85%;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.1),transparent 62%);filter:blur(10px);animation:ftDriftB 32s ease-in-out infinite}
+.orb-c{position:absolute;top:8%;right:12%;width:34%;height:40%;border-radius:50%;background:radial-gradient(circle,rgba(255,180,58,.06),transparent 60%);animation:ftDriftB 32s ease-in-out infinite}
+.hero-in{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1}
+.hero-copy{max-width:760px}
+.hero-eyebrow{margin:0 0 22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:var(--lcyan);text-transform:uppercase}
+.hero h1{margin:0 0 24px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(40px,7vw,68px);line-height:1.04;letter-spacing:-0.03em;text-wrap:balance}
+.hero h1 span{display:block}
+.hero h1 .grad{background:linear-gradient(92deg,#38BDF8,#22D3EE);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--cyan);padding-bottom:.08em}
+.hero-sub{margin:0 0 40px;font-size:clamp(16px,2vw,18px);line-height:1.65;color:var(--muted);max-width:560px;text-wrap:pretty}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn-main{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#1A1204;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;padding:17px 30px;border-radius:999px;box-shadow:0 12px 34px -12px var(--accent-glow);transition:box-shadow .3s ease;will-change:transform}
+.btn-main:hover{color:#1A1204;box-shadow:0 16px 44px -10px var(--accent-glow)}
+.btn-main svg{transition:transform .35s var(--ease)}
+.btn-ghost{display:inline-flex;align-items:center;gap:9px;color:var(--ink);border:1px solid rgba(159,179,204,.28);font-weight:600;font-size:15px;padding:16px 26px;border-radius:999px;transition:border-color .25s,transform .25s var(--ease)}
+.btn-ghost:hover{border-color:rgba(125,211,252,.6);color:var(--ink);transform:translateY(-1px)}
+.hero-note{margin:26px 0 0;font-size:13px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.hero-note .dot{width:7px;height:7px;border-radius:50%;background:#34D399;flex:none}
+
+/* ============ TRUST BAR ============ */
+.trust{position:relative;z-index:1;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);background:rgba(10,22,40,.55)}
+.trust-in{padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;align-items:center}
+.stats{display:flex;gap:34px;flex-wrap:wrap}
+.stat-num{font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em}
+.stat-unit{font-size:20px;color:var(--muted)}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px}
+.airlines{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:flex-end;opacity:.9}
+.airlines span{font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:var(--dim)}
+.airlines .it{font-style:italic}
+
+/* ============ SECTIONS ============ */
+.section-how{position:relative;z-index:1;padding:110px 24px}
+.section-why{position:relative;z-index:1;padding:30px 24px 110px}
+.section-dest{position:relative;z-index:1;padding:0 24px 120px}
+.section-rev{position:relative;z-index:1;padding:0 24px 120px}
+.section-contact{position:relative;z-index:1;padding:0 24px 130px}
+h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.025em;line-height:1.08;text-wrap:balance}
+.section-sub{margin:0 0 56px;color:var(--muted);font-size:16px;line-height:1.6;max-width:520px}
+
+/* how cards */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.step-card{display:block;background:rgba(16,33,58,.6);border:1px solid var(--line);border-radius:18px;padding:30px 26px;color:var(--ink);transition:transform .3s var(--ease),border-color .3s}
+.step-card:hover{transform:translateY(-4px);border-color:rgba(125,211,252,.4);color:var(--ink)}
+.step-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.step-code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--lcyan);letter-spacing:.14em}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:rgba(125,211,252,.25)}
+.step-card h3{margin:0 0 10px;font-family:'Manrope',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.01em}
+.step-card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6}
+
+/* why cards */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.why-card{border:1px solid var(--line);border-radius:18px;padding:26px 24px;background:rgba(10,22,40,.4)}
+.why-glyph{width:38px;height:38px;border-radius:11px;background:rgba(56,189,248,.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:var(--lcyan);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600}
+.why-card h3{margin:0 0 8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:17px}
+.why-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+/* destination flip cards */
+.dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.dest{perspective:1400px;cursor:pointer;outline-offset:4px}
+.dest-inner{position:relative;height:340px;transform-style:preserve-3d;transform:rotateY(0deg);transition:transform .65s var(--ease)}
+.dest.flipped .dest-inner{transform:rotateY(180deg)}
+@media (hover:hover) and (pointer:fine){.dest:hover .dest-inner{transform:rotateY(180deg)}}
+.dest-face{position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.dest-front{border:1px solid rgba(159,179,204,.14)}
+.dest-bg{position:absolute;inset:0;transform:scale(1);transition:transform 6s ease-out}
+.dest:hover .dest-bg{transform:scale(1.08)}
+.dest-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,32,.05) 30%,rgba(8,17,32,.72))}
+.dest-route{position:absolute;top:20px;left:22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(234,242,252,.75)}
+.dest-code{position:absolute;top:44%;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:64px;letter-spacing:.06em;color:rgba(234,242,252,.16);transform:translateY(-50%)}
+.dest-foot{position:absolute;left:22px;right:22px;bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.dest-name{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em}
+.dest-country{font-size:13px;color:var(--muted);margin-top:3px}
+.dest-arrow{width:34px;height:34px;border-radius:50%;border:1px solid rgba(234,242,252,.3);display:flex;align-items:center;justify-content:center;flex:none}
+.dest-back{transform:rotateY(180deg);background:linear-gradient(160deg,#10213A,#0A1628);border:1px solid rgba(125,211,252,.28);display:flex;flex-direction:column;justify-content:space-between;padding:26px 24px}
+.dest-back-top{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
+.dest-from{margin-top:26px;font-size:13px;color:var(--muted)}
+.dest-price{font-family:'Manrope',sans-serif;font-weight:800;font-size:44px;letter-spacing:-0.03em;margin-top:4px}
+.dest-note{font-size:12.5px;color:var(--dim);margin-top:6px}
+.dest-cta{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--accent);color:#1A1204;font-weight:700;font-size:14.5px;padding:14px;border-radius:12px;transition:transform .25s var(--ease)}
+.dest-cta:hover{transform:translateY(-2px);color:#1A1204}
+.dest-hint{margin:26px 0 0;font-size:13px;color:var(--dim)}
+.bg-IST{background:linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)}
+.bg-DXB{background:linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)}
+.bg-MOW{background:linear-gradient(155deg,#1B2B4A 0%,#2E4A6E 60%,#7A93B5 100%)}
+.bg-JED{background:linear-gradient(155deg,#123A34 0%,#2E6B54 55%,#C9A86A 100%)}
+.bg-ICN{background:linear-gradient(155deg,#1E2B50 0%,#4A3A6E 55%,#B56B8A 100%)}
+.bg-ALA{background:linear-gradient(155deg,#14324A 0%,#2E5E6E 55%,#6BAB9C 100%)}
+
+/* reviews */
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start}
+.rev-card{background:var(--card);border:1px solid var(--line);border-radius:18px 18px 18px 6px;padding:20px 20px 16px}
+.rev-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.rev-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;color:#06121F;flex:none}
+.rev-name{font-weight:600;font-size:14.5px}
+.rev-route{font-size:12px;color:var(--dim)}
+.rev-text{margin:0;font-size:14.5px;line-height:1.6;color:#C7D6E8}
+.rev-time{display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-top:10px;font-size:11.5px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+
+/* contact */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;align-items:stretch}
+.contact-grid h2{margin:0 0 34px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-0.025em;line-height:1.1;text-wrap:balance}
+.contact-dl{margin:0;display:grid;gap:20px;font-size:15px}
+.contact-dl>div{display:grid;gap:4px}
+.contact-dl dt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+.contact-dl dd{margin:0;color:var(--ink);line-height:1.5}
+.contact-dl dd.links{display:flex;gap:14px;flex-wrap:wrap}
+.contact-phone{color:var(--ink);font-family:'Manrope',sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.01em}
+.contact-phone:hover{color:var(--lcyan)}
+.soft-link{color:var(--muted)}
+.soft-link:hover{color:var(--lcyan)}
+.map-card{position:relative;min-height:380px;border-radius:22px;overflow:hidden;border:1px solid rgba(159,179,204,.14);background:linear-gradient(150deg,#0C1A30,#081120)}
+.map-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(125,211,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.05) 1px,transparent 1px);background-size:44px 44px}
+.map-roads{position:absolute;inset:0;background-image:linear-gradient(115deg,transparent 47%,rgba(125,211,252,.09) 47.5%,rgba(125,211,252,.09) 48.5%,transparent 49%),linear-gradient(24deg,transparent 61%,rgba(125,211,252,.07) 61.5%,rgba(125,211,252,.07) 62.5%,transparent 63%)}
+.map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.map-pin-in{position:relative;width:16px;height:16px}
+.map-pin-in .pulse{position:absolute;inset:0;border-radius:50%;background:var(--accent);animation:ftPulse 2.6s ease-out infinite}
+.map-pin-in .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
+.map-label{position:absolute;top:54%;left:50%;transform:translateX(-50%);margin-top:16px;background:rgba(8,17,32,.85);border:1px solid rgba(159,179,204,.2);border-radius:10px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#C7D6E8;white-space:nowrap}
+.map-coord{position:absolute;left:18px;bottom:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
+.map-city{position:absolute;right:18px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
+
+/* ============ FOOTER ============ */
+.site-footer{position:relative;z-index:1;border-top:1px solid var(--line-soft);background:var(--bg-deep);overflow:hidden}
+.runway{position:relative;height:74px;max-width:1200px;margin:0 auto;padding:0 24px}
+.runway-line{position:absolute;left:24px;right:24px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(125,211,252,.28) 0 34px,transparent 34px 58px)}
+.runway-labels{position:absolute;left:24px;right:24px;top:calc(50% - 13px);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--faint)}
+.runway-plane{position:absolute;top:calc(50% - 12px);left:12%;opacity:0;will-change:transform}
+.pass-wrap{max-width:1200px;margin:0 auto;padding:30px 24px 0;display:flex;justify-content:center}
+.pass{width:100%;max-width:680px;background:#F4F1E9;color:#141B26;border-radius:18px;position:relative;box-shadow:0 30px 70px -30px rgba(0,0,0,.7)}
+.pass-head{padding:24px 28px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.pass-brand{display:flex;align-items:center;gap:9px;font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em}
+.pass-brand img{display:block;height:30px;width:auto}
+.pass-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#8A8474}
+.pass-body{padding:0 28px 22px}
+.pass-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:#8A8474;margin-bottom:6px}
+.pass-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,34px);letter-spacing:-0.025em;line-height:1.12;text-wrap:balance}
+.pass-data{display:flex;gap:26px;flex-wrap:wrap;margin-top:20px;font-family:'JetBrains Mono',monospace}
+.pass-data .lbl{font-size:9.5px;letter-spacing:.18em;color:#8A8474}
+.pass-data .val{font-size:16px;font-weight:600}
+.pass-tear{position:relative;height:0;border-top:2px dashed #C9C3B4;margin:0 10px}
+.pass-tear span{position:absolute;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--bg-deep)}
+.pass-tear .l{left:-22px}
+.pass-tear .r{right:-22px}
+.pass-foot{padding:20px 28px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.barcode{height:44px;flex:1;min-width:150px;background:repeating-linear-gradient(90deg,#141B26 0 2px,transparent 2px 5px,#141B26 5px 6px,transparent 6px 11px,#141B26 11px 14px,transparent 14px 17px)}
+.btn-pass{display:inline-flex;align-items:center;gap:10px;background:#141B26;color:#F4F1E9;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;padding:15px 26px;border-radius:999px;transition:transform .25s var(--ease)}
+.btn-pass:hover{transform:translateY(-2px);color:#F4F1E9}
+.legal{max-width:1200px;margin:0 auto;padding:44px 24px 34px;display:flex;flex-wrap:wrap;gap:18px 34px;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--dim)}
+.legal-id{display:grid;gap:4px}
+.legal-id .lic{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em}
+.legal-links{display:flex;gap:20px;flex-wrap:wrap}
+.legal-links a{color:var(--muted)}
+.legal-links a:hover{color:var(--ink)}
+
+/* ============ STICKY MOBILE CTA ============ */
+.sticky-cta{position:fixed;left:50%;bottom:18px;z-index:60;display:none;align-items:center;gap:10px;background:var(--accent);color:#1A1204;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;padding:15px 26px;border-radius:999px;box-shadow:0 14px 36px -10px var(--accent-glow);transform:translateX(-50%) translateY(0);opacity:1;transition:transform .4s var(--ease),opacity .4s ease;white-space:nowrap}
+.sticky-cta.away{transform:translateX(-50%) translateY(90px);opacity:0}
+@media (max-width:899px){.sticky-cta{display:inline-flex}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .orb-a,.orb-b,.orb-c,.brand-icon::before,.brand-icon::after,.map-pin-in .pulse{animation:none}
+  .dest-inner,.dest-bg{transition:none}
+}
+</style>
+</head>
+<body>
+<noscript>
+  <div style="position:fixed;top:0;left:0;right:0;z-index:100;background:#FFB43A;color:#1A1204;font:600 14px/1.4 system-ui,sans-serif;text-align:center;padding:10px 16px">
+    Sayt to'liq ishlashi uchun JavaScript'ni yoqing · Включите JavaScript · Please enable JavaScript
+  </div>
+</noscript>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-in">
+    <a href="#hero" class="brand" aria-label="Fliptravel — bosh sahifa">
+      <span class="brand-icon"><img data-intro-logo src="img/logo-icon.png" alt="" width="384" height="497"></span>
+      <span class="brand-word"><span class="bw-a">flip</span>travel</span>
+    </a>
+    <nav class="mainnav" aria-label="Main">
+      <a href="#how" data-t="navHow">Qanday ishlaydi</a>
+      <a href="#destinations" data-t="navDest">Yo'nalishlar</a>
+      <a href="#reviews" data-t="navRev">Fikrlar</a>
+      <a href="#contact" data-t="navContact">Aloqa</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang-group" role="group" aria-label="Language">
+        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn-header" href="https://t.me/fliptravelbot?start=site_header" target="_blank" rel="noopener" data-t="navCta">Botga yozish</a>
+    </div>
+  </div>
+</header>
+
+<main style="position:relative">
+
+  <!-- ============ FLIGHT PATH (page-wide) ============ -->
+  <div class="flight-layer" aria-hidden="true">
+    <svg id="pathSvg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(125,211,252,.13)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="3 5" stroke-linecap="round" pathLength="1000"></path>
+      <path id="pathDraw" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(56,189,248,.38)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+    </svg>
+    <div class="flight-plane" id="flightPlane">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="hero">
+    <div class="hero-orbs" aria-hidden="true">
+      <div class="orb-a"></div>
+      <div class="orb-b"></div>
+      <div class="orb-c"></div>
+    </div>
+    <div class="hero-in">
+      <div class="hero-copy">
+        <p class="hero-eyebrow" data-intro="0" data-t="heroEyebrow">Toshkent · Rasmiy aviakassa · 2017-yildan beri</p>
+        <h1>
+          <span data-intro="1" data-t="heroTitle1">Dunyoning istalgan nuqtasiga</span>
+          <span data-intro="2" class="grad" data-t="heroTitle2">bitta xabar bilan uching</span>
+        </h1>
+        <p class="hero-sub" data-intro="3" data-t="heroSub">Fliptravel — aviachiptalar bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.</p>
+        <div class="hero-ctas" data-intro="4">
+          <a id="magneticCta" class="btn-main" href="https://t.me/fliptravelbot?start=site_hero" target="_blank" rel="noopener">
+            <svg data-plane-icon width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span data-t="ctaMain">Telegramda chipta so'rash</span>
+          </a>
+          <a class="btn-ghost" href="tel:+998712000000">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+            <span data-t="ctaCall">Qo'ng'iroq qilish</span>
+          </a>
+        </div>
+        <p class="hero-note" data-intro="5"><span class="dot"></span><span data-t="heroNote">Menejerlar hozir onlayn · har kuni 9:00–21:00</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST BAR ============ -->
+  <section class="trust">
+    <div class="wrap trust-in">
+      <div class="stats" data-reveal>
+        <div>
+          <div class="stat-num"><span data-countto="9">9</span></div>
+          <div class="stat-label" data-t="statYears">yil aviachiptalar bozorida</div>
+        </div>
+        <div>
+          <div class="stat-num"><span data-countto="48000">48&#8201;000</span>+</div>
+          <div class="stat-label" data-t="statTickets">sotilgan chiptalar</div>
+        </div>
+        <div>
+          <div class="stat-num"><span data-countto="5">5</span><span class="stat-unit"> <span data-t="statMin">daq</span></span></div>
+          <div class="stat-label" data-t="statReply">o'rtacha javob vaqti</div>
+        </div>
+      </div>
+      <div class="airlines" data-reveal data-delay="120">
+        <span>Uzbekistan Airways</span>
+        <span>Turkish Airlines</span>
+        <span class="it">flydubai</span>
+        <span>Qanot Sharq</span>
+        <span>Aeroflot</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how" class="section-how">
+    <div class="wrap" style="padding:0">
+      <p class="kicker" data-reveal data-t="howKicker">Qanday ishlaydi</p>
+      <h2 class="title" data-reveal data-delay="60" style="max-width:640px" data-t="howTitle">Uch qadam — va e-chipta qo'lingizda</h2>
+      <p class="section-sub" data-reveal data-delay="120" data-t="howSub">Sayt hech narsa sotmaydi. Hammasi Telegramda — tez, jonli muloqotda va ortiqcha formalarsiz.</p>
+      <div class="steps-grid" id="stepsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ WHY FLIPTRAVEL ============ -->
+  <section class="section-why">
+    <div class="wrap" style="padding:0">
+      <h2 class="title" data-reveal style="max-width:560px;margin-bottom:48px" data-t="whyTitle">Nega yo'lovchilar Fliptravelni tanlaydi</h2>
+      <div class="why-grid" id="whyGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ DESTINATIONS ============ -->
+  <section id="destinations" class="section-dest">
+    <div class="wrap" style="padding:0">
+      <p class="kicker" data-reveal data-t="destKicker">Ommabop yo'nalishlar</p>
+      <h2 class="title" data-reveal data-delay="60" style="margin-bottom:14px" data-t="destTitle">Toshkentdan to'g'ridan-to'g'ri</h2>
+      <p class="section-sub" data-reveal data-delay="120" style="margin-bottom:50px" data-t="destSub">Narxlar mo'ljal uchun — aniq narxni bot 5 daqiqada aytadi. Kartani bosing yoki ustiga olib boring.</p>
+      <div class="dest-grid" id="destGrid"></div>
+      <p class="dest-hint" data-reveal data-t="destHint">* Narxlar mavsum va sanaga qarab o'zgaradi. Boshqa yo'nalish kerakmi? Botga yozing.</p>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section id="reviews" class="section-rev">
+    <div class="wrap" style="padding:0">
+      <p class="kicker" data-reveal data-t="revKicker">Mijozlar fikri</p>
+      <h2 class="title" data-reveal data-delay="60" style="max-width:560px;margin-bottom:50px" data-t="revTitle">Telegramdagi minglab suhbatlardan bir nechtasi</h2>
+      <div class="rev-grid" id="revGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="section-contact">
+    <div class="wrap contact-grid" style="padding:0">
+      <div data-reveal>
+        <p class="kicker" data-t="contactKicker">Aloqa</p>
+        <h2 data-t="contactTitle">Ofisimiz Toshkent markazida</h2>
+        <dl class="contact-dl">
+          <div>
+            <dt data-t="addressLabel">Manzil</dt>
+            <dd data-t="address">Toshkent sh., Amir Temur shoh ko'chasi, 107B (Metro: Bodomzor)</dd>
+          </div>
+          <div>
+            <dt data-t="phoneLabel">Telefon</dt>
+            <dd><a class="contact-phone" href="tel:+998712000000">+998 71 200-00-00</a></dd>
+          </div>
+          <div>
+            <dt>Telegram</dt>
+            <dd class="links">
+              <a href="https://t.me/fliptravelbot?start=site_contact" target="_blank" rel="noopener">@fliptravelbot</a>
+              <a class="soft-link" href="https://t.me/fliptravel_admin" target="_blank" rel="noopener">@fliptravel_admin</a>
+            </dd>
+          </div>
+          <div>
+            <dt>E-mail / Instagram</dt>
+            <dd class="links">
+              <a class="soft-link" href="mailto:hello@fliptravel.uz">hello@fliptravel.uz</a>
+              <a class="soft-link" href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener">@fliptravel.uz</a>
+            </dd>
+          </div>
+          <div>
+            <dt data-t="hoursLabel">Ish vaqti</dt>
+            <dd data-t="hours">Har kuni 9:00 – 21:00</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="map-card" data-reveal data-delay="120">
+        <div class="map-grid-bg" aria-hidden="true"></div>
+        <div class="map-roads" aria-hidden="true"></div>
+        <div class="map-pin">
+          <div class="map-pin-in">
+            <span class="pulse" aria-hidden="true"></span>
+            <span class="core"></span>
+          </div>
+        </div>
+        <div class="map-label">FLIPTRAVEL · TAS</div>
+        <div class="map-coord">41.2995° N · 69.2401° E</div>
+        <div class="map-city">TASHKENT</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER / LANDING ============ -->
+<footer class="site-footer" id="siteFooter">
+  <div class="runway" aria-hidden="true">
+    <div class="runway-line"></div>
+    <div class="runway-labels"><span>RWY 08L</span><span>FLIPTRAVEL INTL</span></div>
+    <div class="runway-plane" id="runwayPlane">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
+    </div>
+  </div>
+
+  <div class="pass-wrap">
+    <div class="pass" data-reveal>
+      <div class="pass-head">
+        <span class="pass-brand">
+          <img src="img/logo-icon.png" alt="" width="384" height="497">
+          FLIPTRAVEL AIR
+        </span>
+        <span class="pass-tag">BOARDING PASS</span>
+      </div>
+      <div class="pass-body">
+        <div class="pass-kicker" data-t="passKicker">KEYINGI SAFARINGIZ</div>
+        <div class="pass-title" data-t="passTitle">Bortga marhamat — chipta bir xabar narida</div>
+        <div class="pass-data">
+          <div><div class="lbl">FROM</div><div class="val">TAS</div></div>
+          <div><div class="lbl">TO</div><div class="val">ANY</div></div>
+          <div><div class="lbl">GATE</div><div class="val">TG</div></div>
+          <div><div class="lbl">SEAT</div><div class="val">1A</div></div>
+          <div><div class="lbl">CLASS</div><div class="val">FLIP</div></div>
+        </div>
+      </div>
+      <div class="pass-tear" aria-hidden="true"><span class="l"></span><span class="r"></span></div>
+      <div class="pass-foot">
+        <div class="barcode" aria-hidden="true"></div>
+        <a class="btn-pass" href="https://t.me/fliptravelbot?start=site_footer" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#F4F1E9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span data-t="passCta">Chipta so'rash</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="legal">
+    <div class="legal-id">
+      <span data-t="legalEntity">«FLIPTRAVEL» MChJ</span>
+      <span class="lic">STIR 000 000 000 · <span data-t="license">Litsenziya</span> № AT-000000</span>
+    </div>
+    <div class="legal-links">
+      <a href="tel:+998712000000">+998 71 200-00-00</a>
+      <a href="https://t.me/fliptravelbot?start=site_footer" target="_blank" rel="noopener">@fliptravelbot</a>
+      <a href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener">Instagram</a>
+    </div>
+    <span>© 2026 Fliptravel · Tashkent</span>
+  </div>
+</footer>
+
+<!-- ============ STICKY MOBILE CTA ============ -->
+<a class="sticky-cta" id="stickyCta" href="https://t.me/fliptravelbot?start=site_sticky" target="_blank" rel="noopener">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  <span data-t="stickyCta">Botga yozish</span>
+</a>
+
+<script>
+(function () {
+  'use strict';
+
+  var CONFIG = {
+    bot: 'https://t.me/fliptravelbot',
+    prices: { IST: 189, DXB: 149, MOW: 129, JED: 339, ICN: 299, ALA: 89 }
+  };
+
+  var TITLES = {
+    uz: 'Fliptravel — aviachiptalar Telegramda',
+    ru: 'Fliptravel — авиабилеты в Telegram',
+    en: 'Fliptravel — air tickets on Telegram'
+  };
+
+  var DICTS = {
+    uz: {
+      navHow: "Qanday ishlaydi", navDest: "Yo'nalishlar", navRev: "Fikrlar", navContact: "Aloqa", navCta: "Botga yozish",
+      heroEyebrow: "Toshkent · Rasmiy aviakassa · 2017-yildan beri",
+      heroTitle1: "Dunyoning istalgan nuqtasiga", heroTitle2: "bitta xabar bilan uching",
+      heroSub: "Fliptravel — aviachiptalar bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.",
+      ctaMain: "Telegramda chipta so'rash", ctaCall: "Qo'ng'iroq qilish",
+      heroNote: "Menejerlar hozir onlayn · har kuni 9:00–21:00",
+      statYears: "yil aviachiptalar bozorida", statTickets: "sotilgan chiptalar", statMin: "daq", statReply: "o'rtacha javob vaqti",
+      howKicker: "Qanday ishlaydi", howTitle: "Uch qadam — va e-chipta qo'lingizda",
+      howSub: "Sayt hech narsa sotmaydi. Hammasi Telegramda — tez, jonli muloqotda va ortiqcha formalarsiz.",
+      steps: [
+        { title: "Botga yozing", desc: "Yo'nalish, sana va yo'lovchilar sonini yuboring. Ro'yxatdan o'tish shart emas." },
+        { title: "Variantlarni oling", desc: "Menejer 5 daqiqada aniq narxlar bilan 2–3 ta eng qulay variantni yuboradi." },
+        { title: "To'lang va uching", desc: "Qulay usulda to'laysiz — e-chipta darhol Telegramingizga keladi." }
+      ],
+      whyTitle: "Nega yo'lovchilar Fliptravelni tanlaydi",
+      why: [
+        { title: "24/7 qo'llab-quvvatlash", desc: "Reys kechiksa yoki reja o'zgarsa — kechasi ham javob beramiz." },
+        { title: "Rasmiy litsenziya", desc: "Ro'yxatdan o'tgan agentlik: shartnoma, chek va kafolat bilan ishlaymiz." },
+        { title: "Eng yaxshi narx kafolati", desc: "Arzonroq topsangiz — farqini qoplaymiz yoki narxni tenglashtiramiz." },
+        { title: "5 daqiqada javob", desc: "Ish vaqtida har bir so'rovga 5 daqiqa ichida javob beramiz." }
+      ],
+      destKicker: "Ommabop yo'nalishlar", destTitle: "Toshkentdan to'g'ridan-to'g'ri",
+      destSub: "Narxlar mo'ljal uchun — aniq narxni bot 5 daqiqada aytadi. Kartani bosing yoki ustiga olib boring.",
+      destFrom: "narxlar", destRound: "IQTISODIY", destNote: "bir tomonga, yig'imlar bilan",
+      destCta: "Botda so'rash", destHint: "* Narxlar mavsum va sanaga qarab o'zgaradi. Boshqa yo'nalish kerakmi? Botga yozing.",
+      revKicker: "Mijozlar fikri", revTitle: "Telegramdagi minglab suhbatlardan bir nechtasi",
+      reviews: [
+        { name: "Dilnoza R.", route: "TAS → JED · Umra", text: "4 kishiga Jidda uchun chipta oldik. Hammasi botda 20 daqiqada hal bo'ldi, narx boshqa joydagidan arzonroq chiqdi. Rahmat!", time: "14:32" },
+        { name: "Sardor A.", route: "TAS → IST", text: "Reysim bekor bo'lganda kechasi 2 da yozdim — 10 daqiqada yangi variant topib berishdi. Shunaqa servisni birinchi ko'rishim.", time: "02:14" },
+        { name: "Olga V.", route: "TAS → MOW", text: "Год покупаю билеты только здесь. Быстро, без лишних вопросов, цены честные. Рекомендую всем коллегам.", time: "11:05" },
+        { name: "Akmal T.", route: "TAS → ICN", text: "Seulga ish safari uchun shoshilinch chipta kerak edi. Ertalab yozdim — tushlikkacha chipta pochtamda edi. Zo'r!", time: "09:48" }
+      ],
+      contactKicker: "Aloqa", contactTitle: "Ofisimiz Toshkent markazida",
+      addressLabel: "Manzil", address: "Toshkent sh., Amir Temur shoh ko'chasi, 107B (Metro: Bodomzor)",
+      phoneLabel: "Telefon", hoursLabel: "Ish vaqti", hours: "Har kuni 9:00 – 21:00",
+      passKicker: "KEYINGI SAFARINGIZ", passTitle: "Bortga marhamat — chipta bir xabar narida",
+      passCta: "Chipta so'rash",
+      legalEntity: "«FLIPTRAVEL» MChJ", license: "Litsenziya",
+      stickyCta: "Botga yozish"
+    },
+    ru: {
+      navHow: "Как это работает", navDest: "Направления", navRev: "Отзывы", navContact: "Контакты", navCta: "Написать в бот",
+      heroEyebrow: "Ташкент · Официальная авиакасса · с 2017 года",
+      heroTitle1: "В любую точку мира —", heroTitle2: "одним сообщением",
+      heroSub: "Fliptravel — официальное агентство авиабилетов. Никакого поиска и ожидания: напишите направление в Telegram-бот — менеджер за 5 минут пришлёт варианты по лучшим ценам.",
+      ctaMain: "Запросить билет в Telegram", ctaCall: "Позвонить",
+      heroNote: "Менеджеры сейчас онлайн · ежедневно 9:00–21:00",
+      statYears: "лет на рынке авиабилетов", statTickets: "проданных билетов", statMin: "мин", statReply: "среднее время ответа",
+      howKicker: "Как это работает", howTitle: "Три шага — и e-билет у вас",
+      howSub: "Сайт ничего не продаёт. Всё происходит в Telegram — быстро, в живом диалоге и без лишних форм.",
+      steps: [
+        { title: "Напишите в бот", desc: "Отправьте направление, даты и число пассажиров. Без регистрации." },
+        { title: "Получите варианты", desc: "Менеджер за 5 минут пришлёт 2–3 лучших варианта с точными ценами." },
+        { title: "Оплатите и летите", desc: "Оплата любым удобным способом — e-билет сразу приходит в Telegram." }
+      ],
+      whyTitle: "Почему пассажиры выбирают Fliptravel",
+      why: [
+        { title: "Поддержка 24/7", desc: "Задержали рейс или изменились планы — ответим даже ночью." },
+        { title: "Официальная лицензия", desc: "Зарегистрированное агентство: договор, чек и гарантии." },
+        { title: "Гарантия лучшей цены", desc: "Нашли дешевле — вернём разницу или сравняем цену." },
+        { title: "Ответ за 5 минут", desc: "В рабочее время отвечаем на каждый запрос в течение 5 минут." }
+      ],
+      destKicker: "Популярные направления", destTitle: "Прямо из Ташкента",
+      destSub: "Цены ориентировочные — точную бот назовёт за 5 минут. Нажмите на карточку или наведите курсор.",
+      destFrom: "цены от", destRound: "ЭКОНОМ", destNote: "в одну сторону, со сборами",
+      destCta: "Спросить в боте", destHint: "* Цены зависят от сезона и дат. Нужно другое направление? Напишите в бот.",
+      revKicker: "Отзывы", revTitle: "Несколько из тысяч диалогов в Telegram",
+      reviews: [
+        { name: "Дильноза Р.", route: "TAS → JED · Умра", text: "Брали билеты в Джидду на четверых. Всё решилось в боте за 20 минут, цена вышла ниже, чем в других местах. Спасибо!", time: "14:32" },
+        { name: "Сардор А.", route: "TAS → IST", text: "Когда отменили рейс, написал в 2 часа ночи — за 10 минут нашли новый вариант. Такой сервис вижу впервые.", time: "02:14" },
+        { name: "Ольга В.", route: "TAS → MOW", text: "Год покупаю билеты только здесь. Быстро, без лишних вопросов, цены честные. Рекомендую всем коллегам.", time: "11:05" },
+        { name: "Акмаль Т.", route: "TAS → ICN", text: "Срочно нужен был билет в Сеул в командировку. Написал утром — к обеду билет был на почте. Отлично!", time: "09:48" }
+      ],
+      contactKicker: "Контакты", contactTitle: "Наш офис в центре Ташкента",
+      addressLabel: "Адрес", address: "г. Ташкент, пр-т Амира Темура, 107Б (метро Бадамзар)",
+      phoneLabel: "Телефон", hoursLabel: "Режим работы", hours: "Ежедневно 9:00 – 21:00",
+      passKicker: "ВАШ СЛЕДУЮЩИЙ РЕЙС", passTitle: "Добро пожаловать на борт — билет в одном сообщении",
+      passCta: "Запросить билет",
+      legalEntity: "ООО «FLIPTRAVEL»", license: "Лицензия",
+      stickyCta: "Написать в бот"
+    },
+    en: {
+      navHow: "How it works", navDest: "Destinations", navRev: "Reviews", navContact: "Contact", navCta: "Message the bot",
+      heroEyebrow: "Tashkent · Licensed air ticket agency · since 2017",
+      heroTitle1: "Fly anywhere in the world —", heroTitle2: "with a single message",
+      heroSub: "Fliptravel is an officially licensed air ticket agency. No search engines, no waiting: send your route to our Telegram bot and a manager will reply within 5 minutes with the best available fares.",
+      ctaMain: "Request a ticket on Telegram", ctaCall: "Call us",
+      heroNote: "Managers are online now · daily 9:00–21:00",
+      statYears: "years in the air ticket market", statTickets: "tickets issued", statMin: "min", statReply: "average response time",
+      howKicker: "How it works", howTitle: "Three steps to your e-ticket",
+      howSub: "This website sells nothing. Everything happens on Telegram — fast, in a live conversation, with no forms to fill in.",
+      steps: [
+        { title: "Message the bot", desc: "Send your route, dates and number of passengers. No sign-up required." },
+        { title: "Receive your options", desc: "Within 5 minutes a manager sends 2–3 best options with exact prices." },
+        { title: "Pay and fly", desc: "Pay however is convenient — your e-ticket arrives instantly on Telegram." }
+      ],
+      whyTitle: "Why travellers choose Fliptravel",
+      why: [
+        { title: "24/7 support", desc: "Delayed flight or a change of plans — we respond even at night." },
+        { title: "Official licence", desc: "A registered agency: contract, receipt and full guarantees." },
+        { title: "Best-price guarantee", desc: "Found it cheaper? We refund the difference or match the fare." },
+        { title: "Reply within 5 minutes", desc: "During working hours, every request is answered within 5 minutes." }
+      ],
+      destKicker: "Popular destinations", destTitle: "Direct from Tashkent",
+      destSub: "Prices are indicative — the bot will quote an exact fare within 5 minutes. Tap or hover a card.",
+      destFrom: "fares from", destRound: "ECONOMY", destNote: "one way, taxes included",
+      destCta: "Ask in the bot", destHint: "* Fares vary by season and dates. Need a different route? Just message the bot.",
+      revKicker: "Reviews", revTitle: "A few of thousands of Telegram conversations",
+      reviews: [
+        { name: "Dilnoza R.", route: "TAS → JED · Umrah", text: "We booked Jeddah tickets for four. Everything was settled in the bot within 20 minutes, and the fare was lower than elsewhere. Thank you!", time: "14:32" },
+        { name: "Sardor A.", route: "TAS → IST", text: "When my flight was cancelled I messaged at 2 a.m. — they found a new option in 10 minutes. First time I've seen service like this.", time: "02:14" },
+        { name: "Olga V.", route: "TAS → MOW", text: "I've been buying tickets here for a year. Fast, no unnecessary questions, honest prices. I recommend them to all my colleagues.", time: "11:05" },
+        { name: "Akmal T.", route: "TAS → ICN", text: "Needed an urgent ticket to Seoul for a business trip. Messaged in the morning — the ticket was in my inbox by lunch. Excellent!", time: "09:48" }
+      ],
+      contactKicker: "Contact", contactTitle: "Our office in central Tashkent",
+      addressLabel: "Address", address: "107B Amir Temur Avenue, Tashkent (Bodomzor metro)",
+      phoneLabel: "Phone", hoursLabel: "Working hours", hours: "Daily 9:00 – 21:00",
+      passKicker: "YOUR NEXT FLIGHT", passTitle: "Welcome aboard — your ticket is one message away",
+      passCta: "Request a ticket",
+      legalEntity: "FLIPTRAVEL LLC", license: "Licence",
+      stickyCta: "Message the bot"
+    }
+  };
+
+  var DEST_META = [
+    { code: 'IST', names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
+    { code: 'DXB', names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
+    { code: 'MOW', names: { uz: ['Moskva', 'Rossiya'], ru: ['Москва', 'Россия'], en: ['Moscow', 'Russia'] } },
+    { code: 'JED', names: { uz: ['Jidda', 'Saudiya Arabistoni'], ru: ['Джидда', 'Саудовская Аравия'], en: ['Jeddah', 'Saudi Arabia'] } },
+    { code: 'ICN', names: { uz: ['Seul', 'Janubiy Koreya'], ru: ['Сеул', 'Южная Корея'], en: ['Seoul', 'South Korea'] } },
+    { code: 'ALA', names: { uz: ['Almati', 'Qozogʼiston'], ru: ['Алматы', 'Казахстан'], en: ['Almaty', 'Kazakhstan'] } }
+  ];
+
+  var AVATAR_BGS = ['#7DD3FC', '#FFB43A', '#A5B4FC', '#6EE7B7'];
+  var EASE = 'cubic-bezier(0.22,1,0.36,1)';
+  var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PLANE_STROKE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+
+  var state = { lang: 'uz', flipped: {} };
+  try {
+    var saved = localStorage.getItem('ft_lang');
+    if (saved && DICTS[saved]) state.lang = saved;
+  } catch (e) {}
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+  // ---------- rendering ----------
+  function renderTexts(t) {
+    document.querySelectorAll('[data-t]').forEach(function (el) {
+      var key = el.getAttribute('data-t');
+      if (t[key] != null) el.textContent = t[key];
+    });
+  }
+
+  function renderSteps(t) {
+    var codes = ['MSG', 'RCV', 'FLY'];
+    document.getElementById('stepsGrid').innerHTML = t.steps.map(function (s, i) {
+      return '<a class="step-card" data-reveal data-delay="' + (i * 90) + '" href="' + CONFIG.bot + '?start=site_steps" target="_blank" rel="noopener">' +
+        '<div class="step-head"><span class="step-code">' + codes[i] + '</span><span class="step-num">0' + (i + 1) + '</span></div>' +
+        '<h3>' + esc(s.title) + '</h3><p>' + esc(s.desc) + '</p></a>';
+    }).join('');
+  }
+
+  function renderWhy(t) {
+    var glyphs = ['24/7', 'LIC', '$=', '5′'];
+    document.getElementById('whyGrid').innerHTML = t.why.map(function (w, i) {
+      return '<div class="why-card" data-reveal data-delay="' + (i * 80) + '">' +
+        '<div class="why-glyph">' + glyphs[i] + '</div>' +
+        '<h3>' + esc(w.title) + '</h3><p>' + esc(w.desc) + '</p></div>';
+    }).join('');
+  }
+
+  function renderDestinations(t, lang) {
+    var grid = document.getElementById('destGrid');
+    grid.innerHTML = DEST_META.map(function (d, i) {
+      var name = d.names[lang][0], country = d.names[lang][1];
+      var price = '$' + CONFIG.prices[d.code];
+      var flipped = state.flipped[d.code] ? ' flipped' : '';
+      return '<div class="dest' + flipped + '" data-code="' + d.code + '" data-reveal data-delay="' + ((i % 3) * 90) + '" role="button" tabindex="0" aria-label="' + esc(name + ' — ' + t.destFrom + ' ' + price) + '">' +
+        '<div class="dest-inner">' +
+          '<div class="dest-face dest-front">' +
+            '<div class="dest-bg bg-' + d.code + '"></div>' +
+            '<div class="dest-shade"></div>' +
+            '<div class="dest-route">TAS → ' + d.code + '</div>' +
+            '<div class="dest-code">' + d.code + '</div>' +
+            '<div class="dest-foot"><div><div class="dest-name">' + esc(name) + '</div><div class="dest-country">' + esc(country) + '</div></div>' +
+            '<div class="dest-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="#EAF2FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>' +
+          '</div>' +
+          '<div class="dest-face dest-back">' +
+            '<div><div class="dest-back-top"><span>TAS → ' + d.code + '</span><span>' + esc(t.destRound) + '</span></div>' +
+            '<div class="dest-from">' + esc(name) + ' · ' + esc(t.destFrom) + '</div>' +
+            '<div class="dest-price">' + price + '</div>' +
+            '<div class="dest-note">' + esc(t.destNote) + '</div></div>' +
+            '<a class="dest-cta" href="' + CONFIG.bot + '?start=site_destinations" target="_blank" rel="noopener">' + PLANE_STROKE + esc(t.destCta) + '</a>' +
+          '</div>' +
+        '</div></div>';
+    }).join('');
+
+    grid.querySelectorAll('.dest').forEach(function (card) {
+      var code = card.getAttribute('data-code');
+      function toggle() {
+        state.flipped[code] = !state.flipped[code];
+        card.classList.toggle('flipped', !!state.flipped[code]);
+      }
+      card.addEventListener('click', toggle);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+      card.querySelector('.dest-cta').addEventListener('click', function (e) { e.stopPropagation(); });
+    });
+  }
+
+  function renderReviews(t) {
+    document.getElementById('revGrid').innerHTML = t.reviews.map(function (r, i) {
+      return '<div class="rev-card" data-reveal data-delay="' + ((i % 2) * 90) + '">' +
+        '<div class="rev-head"><div class="rev-avatar" style="background:' + AVATAR_BGS[i % 4] + '">' + esc(r.name.charAt(0)) + '</div>' +
+        '<div><div class="rev-name">' + esc(r.name) + '</div><div class="rev-route">' + esc(r.route) + '</div></div></div>' +
+        '<p class="rev-text">' + esc(r.text) + '</p>' +
+        '<div class="rev-time">' + esc(r.time) +
+        '<svg width="15" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true"><path d="m1 5 3.5 3.5L11 2M7.5 8.5 9 10 17 2" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,-1)"></path></svg></div></div>';
+    }).join('');
+  }
+
+  function applyLang(code, animate) {
+    state.lang = code;
+    try { localStorage.setItem('ft_lang', code); } catch (e) {}
+    document.documentElement.lang = code;
+    document.title = TITLES[code];
+    var t = DICTS[code];
+    renderTexts(t);
+    renderSteps(t);
+    renderWhy(t);
+    renderDestinations(t, code);
+    renderReviews(t);
+    document.querySelectorAll('.lang-group button').forEach(function (b) {
+      var active = b.getAttribute('data-lang') === code;
+      b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      if (active && animate && !REDUCED) {
+        b.animate([{ transform: 'rotateX(90deg)' }, { transform: 'rotateX(0deg)' }], { duration: 400, easing: EASE });
+      }
+    });
+  }
+
+  document.querySelectorAll('.lang-group button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.getAttribute('data-lang');
+      if (code !== state.lang) applyLang(code, true);
+    });
+  });
+
+  applyLang(state.lang, false);
+
+  // ---------- intro (takeoff, ≤1.2s) ----------
+  var logo = document.querySelector('[data-intro-logo]');
+  if (logo && !REDUCED) {
+    logo.animate([{ transform: 'rotateY(180deg) scale(.6)', opacity: 0 }, { transform: 'rotateY(0deg) scale(1)', opacity: 1 }], { duration: 550, easing: EASE, fill: 'backwards' });
+  }
+  document.querySelectorAll('[data-intro]').forEach(function (el) {
+    var i = +el.getAttribute('data-intro');
+    if (REDUCED) {
+      el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: i * 40, fill: 'backwards' });
+    } else {
+      el.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 600, delay: 120 + i * 95, easing: EASE, fill: 'backwards' });
+    }
+  });
+
+  // ---------- scroll-once reveals ----------
+  var revealIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var el = en.target;
+      revealIO.unobserve(el);
+      if (!el.__hidden) return;
+      var delay = +(el.getAttribute('data-delay') || 0);
+      el.animate(
+        REDUCED
+          ? [{ opacity: 0 }, { opacity: 1 }]
+          : [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: REDUCED ? 300 : 550, delay: delay, easing: EASE, fill: 'backwards' }
+      );
+      el.style.opacity = '';
+      el.__hidden = false;
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('[data-reveal]').forEach(function (el) {
+    var r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight * 0.92) return; // already visible on load — leave as-is
+    el.style.opacity = '0';
+    el.__hidden = true;
+    revealIO.observe(el);
+  });
+
+  // ---------- count-ups (once) ----------
+  var countIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var el = en.target;
+      countIO.unobserve(el);
+      var target = +el.getAttribute('data-countto');
+      if (REDUCED) { el.textContent = fmt(target); return; }
+      var t0 = performance.now(), dur = 1400;
+      function tick(now) {
+        var p = Math.min(1, (now - t0) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-countto]').forEach(function (el) {
+    if (REDUCED) { el.textContent = fmt(+el.getAttribute('data-countto')); return; }
+    el.textContent = '0';
+    countIO.observe(el);
+  });
+
+  // ---------- flight path: scroll-linked draw + plane ----------
+  var pathSvg = document.getElementById('pathSvg');
+  var pathDraw = document.getElementById('pathDraw');
+  var plane = document.getElementById('flightPlane');
+  var pathLen = pathDraw.getTotalLength();
+
+  function updateFlight() {
+    var host = pathSvg.parentElement;
+    var rect = host.getBoundingClientRect();
+    var top = rect.top + window.scrollY, h = rect.height, w = rect.width;
+    if (!h || !w) return;
+    var p = (window.scrollY + window.innerHeight * 0.55 - top) / h;
+    p = Math.max(0, Math.min(1, p));
+    if (REDUCED) {
+      pathDraw.style.strokeDashoffset = '0';
+      plane.style.opacity = '0';
+      return;
+    }
+    pathDraw.style.strokeDashoffset = String(1 - p);
+    var L = pathLen * p;
+    var pt = pathDraw.getPointAtLength(L);
+    var pt2 = pathDraw.getPointAtLength(Math.min(pathLen, L + 0.5));
+    var x = pt.x / 100 * w, y = pt.y / 100 * h;
+    var dx = (pt2.x - pt.x) / 100 * w, dy = (pt2.y - pt.y) / 100 * h;
+    var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    plane.style.opacity = (p > 0.005 && p < 0.995) ? '0.9' : '0';
+    plane.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + ang + 'deg)';
+  }
+
+  // ---------- header state + scroll handler ----------
+  var header = document.getElementById('siteHeader');
+  var scrollRaf = null;
+  function onScroll() {
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(function () {
+      scrollRaf = null;
+      updateFlight();
+      header.classList.toggle('scrolled', window.scrollY > 100);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', updateFlight, { passive: true });
+  updateFlight();
+  header.classList.toggle('scrolled', window.scrollY > 100);
+
+  // ---------- footer visibility: sticky CTA + runway plane ----------
+  var sticky = document.getElementById('stickyCta');
+  var runwayPlane = document.getElementById('runwayPlane');
+  var runwayDone = false;
+  var footerIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      sticky.classList.toggle('away', en.isIntersecting);
+      if (en.isIntersecting && !runwayDone) {
+        runwayDone = true;
+        if (REDUCED) {
+          runwayPlane.style.opacity = '1';
+          runwayPlane.style.transform = 'translateX(0)';
+        } else {
+          runwayPlane.animate(
+            [{ opacity: 0, transform: 'translateX(-90px) translateY(-14px) rotate(6deg)' }, { opacity: 1, transform: 'translateX(0) translateY(0) rotate(0deg)' }],
+            { duration: 900, easing: EASE, fill: 'forwards' }
+          );
+        }
+      }
+    });
+  }, { threshold: 0.05 });
+  footerIO.observe(document.getElementById('siteFooter'));
+
+  // ---------- magnetic CTA (pointer: fine only) ----------
+  var magBtn = document.getElementById('magneticCta');
+  var fine = window.matchMedia('(pointer: fine)').matches;
+  if (magBtn && fine && !REDUCED) {
+    window.addEventListener('mousemove', function (e) {
+      var r = magBtn.getBoundingClientRect();
+      var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      var dist = Math.hypot(dx, dy);
+      var icon = magBtn.querySelector('[data-plane-icon]');
+      if (dist < 130) {
+        var f = (1 - dist / 130) * 0.35;
+        magBtn.style.transform = 'translate(' + (dx * f) + 'px,' + (dy * f) + 'px)';
+        if (icon) icon.style.transform = 'rotate(-14deg)';
+      } else {
+        magBtn.style.transform = '';
+        if (icon) icon.style.transform = '';
+      }
+    }, { passive: true });
+  }
+})();
+</script>
+</body>
+</html>

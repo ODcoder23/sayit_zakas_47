@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#081120;color:#EAF2FC;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:#38BDF8;text-decoration:none}
+a:hover{color:#7DD3FC}
+*:focus-visible{outline:2px solid #38BDF8;outline-offset:3px;border-radius:4px}
+@keyframes ftDriftA{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6%,4%,0) scale(1.12)}100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes ftDriftB{0%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-5%,-3%,0) scale(1)}100%{transform:translate3d(0,0,0) scale(1.05)}}
+@keyframes ftPulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.6);opacity:0}100%{transform:scale(2.6);opacity:0}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</helmet>
+<div style="font-family:'Inter',system-ui,sans-serif;background:#081120;color:#EAF2FC;position:relative;min-height:100vh">
+
+  <!-- ============ HEADER ============ -->
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;background:{{ headerBg }};backdrop-filter:{{ headerBlur }};-webkit-backdrop-filter:{{ headerBlur }};border-bottom:1px solid {{ headerLine }};transition:background .35s ease,border-color .35s ease">
+    <div style="max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <a href="#hero" aria-label="Fliptravel — home" style="display:flex;align-items:center;gap:10px;color:#EAF2FC">
+        <span data-intro-logo style="display:inline-flex;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#38BDF8,#22D3EE);align-items:center;justify-content:center;flex:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#06121F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:17px;letter-spacing:-0.02em">fliptravel</span>
+      </a>
+      <nav aria-label="Main" style="display:{{ navDisplay }};align-items:center;gap:28px">
+        <a href="#how" style="color:#9FB3CC;font-size:14px;font-weight:500" style-hover="color:#EAF2FC">{{ t.navHow }}</a>
+        <a href="#destinations" style="color:#9FB3CC;font-size:14px;font-weight:500" style-hover="color:#EAF2FC">{{ t.navDest }}</a>
+        <a href="#reviews" style="color:#9FB3CC;font-size:14px;font-weight:500" style-hover="color:#EAF2FC">{{ t.navRev }}</a>
+        <a href="#contact" style="color:#9FB3CC;font-size:14px;font-weight:500" style-hover="color:#EAF2FC">{{ t.navContact }}</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div role="group" aria-label="Language" style="display:flex;align-items:center;gap:2px;border:1px solid rgba(159,179,204,.18);border-radius:999px;padding:3px">
+          <button onClick="{{ setUz }}" aria-pressed="{{ isUz }}" style="border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 9px;border-radius:999px;background:{{ uzBg }};color:{{ uzColor }};transition:background .2s,color .2s">UZ</button>
+          <button onClick="{{ setRu }}" aria-pressed="{{ isRu }}" style="border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 9px;border-radius:999px;background:{{ ruBg }};color:{{ ruColor }};transition:background .2s,color .2s">RU</button>
+          <button onClick="{{ setEn }}" aria-pressed="{{ isEn }}" style="border:0;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:5px 9px;border-radius:999px;background:{{ enBg }};color:{{ enColor }};transition:background .2s,color .2s">EN</button>
+        </div>
+        <a href="{{ tgHeader }}" target="_blank" rel="noopener" style="display:{{ navDisplay }};align-items:center;gap:8px;background:{{ accent }};color:#1A1204;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:999px;transition:transform .25s cubic-bezier(0.22,1,0.36,1)" style-hover="transform:translateY(-1px);color:#1A1204">{{ t.navCta }}</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="position:relative">
+
+    <!-- ============ FLIGHT PATH (page-wide) ============ -->
+    <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+      <svg ref="{{ pathSvgRef }}" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;display:block">
+        <path d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(125,211,252,.13)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="3 5" stroke-linecap="round" pathLength="1000"></path>
+        <path ref="{{ pathDrawRef }}" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(56,189,248,.38)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+      </svg>
+      <div ref="{{ planeRef }}" style="position:absolute;top:0;left:0;width:26px;height:26px;margin:-13px 0 0 -13px;opacity:0;will-change:transform">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
+      </div>
+    </div>
+
+    <!-- ============ HERO ============ -->
+    <section id="hero" data-screen-label="Hero" style="position:relative;z-index:1;min-height:92vh;display:flex;align-items:center;overflow:hidden;padding:140px 24px 90px">
+      <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;overflow:hidden">
+        <div style="position:absolute;top:-25%;left:-15%;width:70%;height:80%;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 65%);filter:blur(10px);animation:{{ driftA }}"></div>
+        <div style="position:absolute;bottom:-30%;right:-10%;width:65%;height:85%;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.1),transparent 62%);filter:blur(10px);animation:{{ driftB }}"></div>
+        <div style="position:absolute;top:8%;right:12%;width:34%;height:40%;border-radius:50%;background:radial-gradient(circle,rgba(255,180,58,.06),transparent 60%);animation:{{ driftB }}"></div>
+      </div>
+      <div style="max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:1">
+        <div style="max-width:760px">
+          <p data-intro="0" style="margin:0 0 22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:#7DD3FC;text-transform:uppercase">{{ t.heroEyebrow }}</p>
+          <h1 style="margin:0 0 24px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(40px,7vw,68px);line-height:1.04;letter-spacing:-0.03em;text-wrap:balance">
+            <span data-intro="1" style="display:block">{{ t.heroTitle1 }}</span>
+            <span data-intro="2" style="display:block;background:linear-gradient(92deg,#38BDF8,#22D3EE);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#38BDF8;padding-bottom:.08em">{{ t.heroTitle2 }}</span>
+          </h1>
+          <p data-intro="3" style="margin:0 0 40px;font-size:clamp(16px,2vw,18px);line-height:1.65;color:#9FB3CC;max-width:560px;text-wrap:pretty">{{ t.heroSub }}</p>
+          <div data-intro="4" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+            <a ref="{{ magneticRef }}" href="{{ tgHero }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:{{ accent }};color:#1A1204;font-family:'Manrope',sans-serif;font-weight:800;font-size:16px;padding:17px 30px;border-radius:999px;box-shadow:0 12px 34px -12px {{ accentGlow }};transition:box-shadow .3s ease;will-change:transform" style-hover="color:#1A1204;box-shadow:0 16px 44px -10px {{ accentGlow }}">
+              <svg data-plane-icon width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="transition:transform .35s cubic-bezier(0.22,1,0.36,1)"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              {{ t.ctaMain }}
+            </a>
+            <a href="tel:+998712000000" style="display:inline-flex;align-items:center;gap:9px;color:#EAF2FC;border:1px solid rgba(159,179,204,.28);font-weight:600;font-size:15px;padding:16px 26px;border-radius:999px;transition:border-color .25s,transform .25s cubic-bezier(0.22,1,0.36,1)" style-hover="border-color:rgba(125,211,252,.6);color:#EAF2FC;transform:translateY(-1px)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+              {{ t.ctaCall }}
+            </a>
+          </div>
+          <p data-intro="5" style="margin:26px 0 0;font-size:13px;color:#66799A;display:flex;align-items:center;gap:8px">
+            <span style="width:7px;height:7px;border-radius:50%;background:#34D399;flex:none"></span>
+            {{ t.heroNote }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRUST BAR ============ -->
+    <section data-screen-label="Trust bar" style="position:relative;z-index:1;border-top:1px solid rgba(159,179,204,.1);border-bottom:1px solid rgba(159,179,204,.1);background:rgba(10,22,40,.55)">
+      <div style="max-width:1200px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;align-items:center">
+        <div data-reveal style="display:flex;gap:34px;flex-wrap:wrap">
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em"><span data-countto="9">0</span></div>
+            <div style="font-size:13px;color:#9FB3CC;margin-top:2px">{{ t.statYears }}</div>
+          </div>
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em"><span data-countto="48000">0</span>+</div>
+            <div style="font-size:13px;color:#9FB3CC;margin-top:2px">{{ t.statTickets }}</div>
+          </div>
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em"><span data-countto="5">0</span><span style="font-size:20px;color:#9FB3CC"> {{ t.statMin }}</span></div>
+            <div style="font-size:13px;color:#9FB3CC;margin-top:2px">{{ t.statReply }}</div>
+          </div>
+        </div>
+        <div data-reveal data-delay="120" style="display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:flex-end;opacity:.9">
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#66799A;letter-spacing:.01em">Uzbekistan Airways</span>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#66799A">Turkish Airlines</span>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#66799A;font-style:italic">flydubai</span>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#66799A">Qanot Sharq</span>
+          <span style="font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#66799A">Aeroflot</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section id="how" data-screen-label="How it works" style="position:relative;z-index:1;padding:110px 24px">
+      <div style="max-width:1200px;margin:0 auto">
+        <p data-reveal style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:#7DD3FC;text-transform:uppercase">{{ t.howKicker }}</p>
+        <h2 data-reveal data-delay="60" style="margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.025em;line-height:1.08;max-width:640px;text-wrap:balance">{{ t.howTitle }}</h2>
+        <p data-reveal data-delay="120" style="margin:0 0 56px;color:#9FB3CC;font-size:16px;line-height:1.6;max-width:520px">{{ t.howSub }}</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+          <sc-for list="{{ steps }}" as="step" hint-placeholder-count="3">
+            <a data-reveal data-delay="{{ step.delay }}" href="{{ step.link }}" target="_blank" rel="noopener" style="display:block;background:rgba(16,33,58,.6);border:1px solid rgba(159,179,204,.12);border-radius:18px;padding:30px 26px;color:#EAF2FC;transition:transform .3s cubic-bezier(0.22,1,0.36,1),border-color .3s" style-hover="transform:translateY(-4px);border-color:rgba(125,211,252,.4);color:#EAF2FC">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7DD3FC;letter-spacing:.14em">{{ step.code }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:rgba(125,211,252,.25)">{{ step.num }}</span>
+              </div>
+              <h3 style="margin:0 0 10px;font-family:'Manrope',sans-serif;font-weight:800;font-size:20px;letter-spacing:-0.01em">{{ step.title }}</h3>
+              <p style="margin:0;color:#9FB3CC;font-size:14.5px;line-height:1.6">{{ step.desc }}</p>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY FLIPTRAVEL ============ -->
+    <section data-screen-label="Why Fliptravel" style="position:relative;z-index:1;padding:30px 24px 110px">
+      <div style="max-width:1200px;margin:0 auto">
+        <h2 data-reveal style="margin:0 0 48px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.025em;line-height:1.08;max-width:560px;text-wrap:balance">{{ t.whyTitle }}</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+          <sc-for list="{{ whyItems }}" as="w" hint-placeholder-count="4">
+            <div data-reveal data-delay="{{ w.delay }}" style="border:1px solid rgba(159,179,204,.12);border-radius:18px;padding:26px 24px;background:rgba(10,22,40,.4)">
+              <div style="width:38px;height:38px;border-radius:11px;background:rgba(56,189,248,.1);display:flex;align-items:center;justify-content:center;margin-bottom:18px;color:#7DD3FC;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600">{{ w.glyph }}</div>
+              <h3 style="margin:0 0 8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:17px">{{ w.title }}</h3>
+              <p style="margin:0;color:#9FB3CC;font-size:14px;line-height:1.6">{{ w.desc }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DESTINATIONS ============ -->
+    <section id="destinations" data-screen-label="Popular destinations" style="position:relative;z-index:1;padding:0 24px 120px">
+      <div style="max-width:1200px;margin:0 auto">
+        <p data-reveal style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:#7DD3FC;text-transform:uppercase">{{ t.destKicker }}</p>
+        <h2 data-reveal data-delay="60" style="margin:0 0 14px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.025em;line-height:1.08;text-wrap:balance">{{ t.destTitle }}</h2>
+        <p data-reveal data-delay="120" style="margin:0 0 50px;color:#9FB3CC;font-size:16px;max-width:520px;line-height:1.6">{{ t.destSub }}</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px">
+          <sc-for list="{{ destinations }}" as="d" hint-placeholder-count="6">
+            <div data-reveal data-delay="{{ d.delay }}" role="button" tabIndex="0" aria-label="{{ d.aria }}" onClick="{{ d.toggle }}" onKeyDown="{{ d.onKey }}" style="perspective:1400px;cursor:pointer;outline-offset:4px">
+              <div style="position:relative;height:340px;transform-style:preserve-3d;transform:{{ d.flipT }};transition:transform .65s cubic-bezier(0.22,1,0.36,1)" style-hover="transform:rotateY(180deg)">
+                <!-- front -->
+                <div style="position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid rgba(159,179,204,.14)">
+                  <div style="position:absolute;inset:0;background:{{ d.bg }};transform:scale(1);transition:transform 6s ease-out" style-hover="transform:scale(1.08)"></div>
+                  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,32,.05) 30%,rgba(8,17,32,.72))"></div>
+                  <div style="position:absolute;top:20px;left:22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(234,242,252,.75)">TAS → {{ d.code }}</div>
+                  <div style="position:absolute;top:44%;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:64px;letter-spacing:.06em;color:rgba(234,242,252,.16);transform:translateY(-50%)">{{ d.code }}</div>
+                  <div style="position:absolute;left:22px;right:22px;bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+                    <div>
+                      <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em">{{ d.name }}</div>
+                      <div style="font-size:13px;color:#9FB3CC;margin-top:3px">{{ d.country }}</div>
+                    </div>
+                    <div style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(234,242,252,.3);display:flex;align-items:center;justify-content:center;flex:none">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="#EAF2FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                  </div>
+                </div>
+                <!-- back -->
+                <div style="position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(160deg,#10213A,#0A1628);border:1px solid rgba(125,211,252,.28);display:flex;flex-direction:column;justify-content:space-between;padding:26px 24px">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#66799A">
+                      <span>TAS → {{ d.code }}</span><span>{{ t.destRound }}</span>
+                    </div>
+                    <div style="margin-top:26px;font-size:13px;color:#9FB3CC">{{ d.name }} · {{ t.destFrom }}</div>
+                    <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:44px;letter-spacing:-0.03em;margin-top:4px">{{ d.price }}</div>
+                    <div style="font-size:12.5px;color:#66799A;margin-top:6px">{{ t.destNote }}</div>
+                  </div>
+                  <a href="{{ d.link }}" target="_blank" rel="noopener" onClick="{{ stopClick }}" style="display:flex;align-items:center;justify-content:center;gap:9px;background:{{ accent }};color:#1A1204;font-weight:700;font-size:14.5px;padding:14px;border-radius:12px;transition:transform .25s cubic-bezier(0.22,1,0.36,1)" style-hover="transform:translateY(-2px);color:#1A1204">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    {{ t.destCta }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <p data-reveal style="margin:26px 0 0;font-size:13px;color:#66799A">{{ t.destHint }}</p>
+      </div>
+    </section>
+
+    <!-- ============ TESTIMONIALS ============ -->
+    <section id="reviews" data-screen-label="Testimonials" style="position:relative;z-index:1;padding:0 24px 120px">
+      <div style="max-width:1200px;margin:0 auto">
+        <p data-reveal style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:#7DD3FC;text-transform:uppercase">{{ t.revKicker }}</p>
+        <h2 data-reveal data-delay="60" style="margin:0 0 50px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.025em;line-height:1.08;max-width:560px;text-wrap:balance">{{ t.revTitle }}</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start">
+          <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="4">
+            <div data-reveal data-delay="{{ r.delay }}" style="background:#10213A;border:1px solid rgba(159,179,204,.12);border-radius:18px 18px 18px 6px;padding:20px 20px 16px">
+              <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+                <div style="width:38px;height:38px;border-radius:50%;background:{{ r.avatarBg }};display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;color:#06121F;flex:none">{{ r.initial }}</div>
+                <div>
+                  <div style="font-weight:600;font-size:14.5px">{{ r.name }}</div>
+                  <div style="font-size:12px;color:#66799A">{{ r.route }}</div>
+                </div>
+              </div>
+              <p style="margin:0;font-size:14.5px;line-height:1.6;color:#C7D6E8">{{ r.text }}</p>
+              <div style="display:flex;justify-content:flex-end;align-items:center;gap:5px;margin-top:10px;font-size:11.5px;color:#66799A;font-family:'JetBrains Mono',monospace">
+                {{ r.time }}
+                <svg width="15" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true"><path d="m1 5 3.5 3.5L11 2M7.5 8.5 9 10 17 2" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,-1)"></path></svg>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" data-screen-label="Contact and location" style="position:relative;z-index:1;padding:0 24px 130px">
+      <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;align-items:stretch">
+        <div data-reveal>
+          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;color:#7DD3FC;text-transform:uppercase">{{ t.contactKicker }}</p>
+          <h2 style="margin:0 0 34px;font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-0.025em;line-height:1.1;text-wrap:balance">{{ t.contactTitle }}</h2>
+          <dl style="margin:0;display:grid;gap:20px;font-size:15px">
+            <div style="display:grid;gap:4px">
+              <dt style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#66799A;text-transform:uppercase">{{ t.addressLabel }}</dt>
+              <dd style="margin:0;color:#EAF2FC;line-height:1.5">{{ t.address }}</dd>
+            </div>
+            <div style="display:grid;gap:4px">
+              <dt style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#66799A;text-transform:uppercase">{{ t.phoneLabel }}</dt>
+              <dd style="margin:0"><a href="tel:+998712000000" style="color:#EAF2FC;font-family:'Manrope',sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.01em" style-hover="color:#7DD3FC">+998 71 200-00-00</a></dd>
+            </div>
+            <div style="display:grid;gap:4px">
+              <dt style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#66799A;text-transform:uppercase">Telegram</dt>
+              <dd style="margin:0;display:flex;gap:14px;flex-wrap:wrap">
+                <a href="https://t.me/fliptravelbot?start=site_contact" target="_blank" rel="noopener">@fliptravelbot</a>
+                <a href="https://t.me/fliptravel_admin" target="_blank" rel="noopener" style="color:#9FB3CC" style-hover="color:#7DD3FC">@fliptravel_admin</a>
+              </dd>
+            </div>
+            <div style="display:grid;gap:4px">
+              <dt style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#66799A;text-transform:uppercase">E-mail / Instagram</dt>
+              <dd style="margin:0;display:flex;gap:14px;flex-wrap:wrap">
+                <a href="mailto:hello@fliptravel.uz" style="color:#9FB3CC" style-hover="color:#7DD3FC">hello@fliptravel.uz</a>
+                <a href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener" style="color:#9FB3CC" style-hover="color:#7DD3FC">@fliptravel.uz</a>
+              </dd>
+            </div>
+            <div style="display:grid;gap:4px">
+              <dt style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#66799A;text-transform:uppercase">{{ t.hoursLabel }}</dt>
+              <dd style="margin:0;color:#EAF2FC">{{ t.hours }}</dd>
+            </div>
+          </dl>
+        </div>
+        <div data-reveal data-delay="120" style="position:relative;min-height:380px;border-radius:22px;overflow:hidden;border:1px solid rgba(159,179,204,.14);background:linear-gradient(150deg,#0C1A30,#081120)">
+          <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(rgba(125,211,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.05) 1px,transparent 1px);background-size:44px 44px"></div>
+          <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(115deg,transparent 47%,rgba(125,211,252,.09) 47.5%,rgba(125,211,252,.09) 48.5%,transparent 49%),linear-gradient(24deg,transparent 61%,rgba(125,211,252,.07) 61.5%,rgba(125,211,252,.07) 62.5%,transparent 63%)"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
+            <div style="position:relative;width:16px;height:16px">
+              <span aria-hidden="true" style="position:absolute;inset:0;border-radius:50%;background:{{ accent }};animation:{{ pulseAnim }}"></span>
+              <span style="position:absolute;inset:0;border-radius:50%;background:{{ accent }};border:3px solid #081120"></span>
+            </div>
+          </div>
+          <div style="position:absolute;top:54%;left:50%;transform:translateX(-50%);margin-top:16px;background:rgba(8,17,32,.85);border:1px solid rgba(159,179,204,.2);border-radius:10px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#C7D6E8;white-space:nowrap">FLIPTRAVEL · TAS</div>
+          <div style="position:absolute;left:18px;bottom:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#66799A">41.2995° N · 69.2401° E</div>
+          <div style="position:absolute;right:18px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#66799A">TASHKENT</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER / LANDING ============ -->
+  <footer ref="{{ footerRef }}" data-screen-label="Footer — runway and boarding pass" style="position:relative;z-index:1;border-top:1px solid rgba(159,179,204,.1);background:#060D19;overflow:hidden">
+    <div aria-hidden="true" style="position:relative;height:74px;max-width:1200px;margin:0 auto;padding:0 24px">
+      <div style="position:absolute;left:24px;right:24px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(125,211,252,.28) 0 34px,transparent 34px 58px)"></div>
+      <div style="position:absolute;left:24px;right:24px;top:calc(50% - 13px);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#3D4F6B"><span>RWY 08L</span><span>FLIPTRAVEL INTL</span></div>
+      <div ref="{{ runwayPlaneRef }}" style="position:absolute;top:calc(50% - 12px);left:12%;opacity:0;will-change:transform">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
+      </div>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:30px 24px 0;display:flex;justify-content:center">
+      <!-- boarding pass -->
+      <div data-reveal style="width:100%;max-width:680px;background:#F4F1E9;color:#141B26;border-radius:18px;position:relative;box-shadow:0 30px 70px -30px rgba(0,0,0,.7)">
+        <div style="padding:24px 28px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:9px">
+            <span style="display:inline-flex;width:24px;height:24px;border-radius:7px;background:#141B26;align-items:center;justify-content:center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#F4F1E9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </span>
+            <span style="font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em">FLIPTRAVEL AIR</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#8A8474">BOARDING PASS</span>
+        </div>
+        <div style="padding:0 28px 22px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:#8A8474;margin-bottom:6px">{{ t.passKicker }}</div>
+          <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(24px,3.4vw,34px);letter-spacing:-0.025em;line-height:1.12;text-wrap:balance">{{ t.passTitle }}</div>
+          <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:20px;font-family:'JetBrains Mono',monospace">
+            <div><div style="font-size:9.5px;letter-spacing:.18em;color:#8A8474">FROM</div><div style="font-size:16px;font-weight:600">TAS</div></div>
+            <div><div style="font-size:9.5px;letter-spacing:.18em;color:#8A8474">TO</div><div style="font-size:16px;font-weight:600">ANY</div></div>
+            <div><div style="font-size:9.5px;letter-spacing:.18em;color:#8A8474">GATE</div><div style="font-size:16px;font-weight:600">TG</div></div>
+            <div><div style="font-size:9.5px;letter-spacing:.18em;color:#8A8474">SEAT</div><div style="font-size:16px;font-weight:600">1A</div></div>
+            <div><div style="font-size:9.5px;letter-spacing:.18em;color:#8A8474">CLASS</div><div style="font-size:16px;font-weight:600">FLIP</div></div>
+          </div>
+        </div>
+        <div aria-hidden="true" style="position:relative;height:0;border-top:2px dashed #C9C3B4;margin:0 10px">
+          <span style="position:absolute;left:-22px;top:-11px;width:22px;height:22px;border-radius:50%;background:#060D19"></span>
+          <span style="position:absolute;right:-22px;top:-11px;width:22px;height:22px;border-radius:50%;background:#060D19"></span>
+        </div>
+        <div style="padding:20px 28px 26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
+          <div aria-hidden="true" style="height:44px;flex:1;min-width:150px;background:repeating-linear-gradient(90deg,#141B26 0 2px,transparent 2px 5px,#141B26 5px 6px,transparent 6px 11px,#141B26 11px 14px,transparent 14px 17px)"></div>
+          <a href="{{ tgFooter }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#141B26;color:#F4F1E9;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;padding:15px 26px;border-radius:999px;transition:transform .25s cubic-bezier(0.22,1,0.36,1)" style-hover="transform:translateY(-2px);color:#F4F1E9">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#F4F1E9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            {{ t.passCta }}
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:44px 24px 34px;display:flex;flex-wrap:wrap;gap:18px 34px;justify-content:space-between;align-items:center;font-size:12.5px;color:#66799A">
+      <div style="display:grid;gap:4px">
+        <span>{{ t.legalEntity }}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em">STIR 000 000 000 · {{ t.license }} № AT-000000</span>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <a href="tel:+998712000000" style="color:#9FB3CC" style-hover="color:#EAF2FC">+998 71 200-00-00</a>
+        <a href="https://t.me/fliptravelbot?start=site_footer" target="_blank" rel="noopener" style="color:#9FB3CC" style-hover="color:#EAF2FC">@fliptravelbot</a>
+        <a href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener" style="color:#9FB3CC" style-hover="color:#EAF2FC">Instagram</a>
+      </div>
+      <span>© 2026 Fliptravel · Tashkent</span>
+    </div>
+  </footer>
+
+  <!-- ============ STICKY MOBILE CTA ============ -->
+  <a href="{{ tgSticky }}" target="_blank" rel="noopener" style="position:fixed;left:50%;bottom:18px;z-index:60;display:{{ stickyDisplay }};align-items:center;gap:10px;background:{{ accent }};color:#1A1204;font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;padding:15px 26px;border-radius:999px;box-shadow:0 14px 36px -10px {{ accentGlow }};transform:translateX(-50%) translateY({{ stickyY }});opacity:{{ stickyOpacity }};transition:transform .4s cubic-bezier(0.22,1,0.36,1),opacity .4s ease;white-space:nowrap">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    {{ t.stickyCta }}
+  </a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accentColor&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FFB43A&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#FFB43A&quot;, &quot;#FF7A59&quot;, &quot;#E8B24B&quot;], &quot;section&quot;: &quot;Brand&quot; },
+  &quot;showStickyCta&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; },
+  &quot;calmMotion&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; }
+}">
+class Component extends DCLogic {
+  // ==== CONFIG — swap real client data here (mirrors config.ts in the brief) ====
+  CONFIG = {
+    bot: 'https://t.me/fliptravelbot',
+    phone: '+998712000000',
+    prices: { IST: 189, DXB: 149, MOW: 129, JED: 339, ICN: 299, ALA: 89 }
+  };
+
+  DICTS = {
+    uz: {
+      navHow: "Qanday ishlaydi", navDest: "Yo'nalishlar", navRev: "Fikrlar", navContact: "Aloqa", navCta: "Botga yozish",
+      heroEyebrow: "Toshkent · Rasmiy aviakassa · 2017-yildan beri",
+      heroTitle1: "Dunyoning istalgan nuqtasiga", heroTitle2: "bitta xabar bilan uching",
+      heroSub: "Fliptravel — aviachiptalar bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.",
+      ctaMain: "Telegramda chipta so'rash", ctaCall: "Qo'ng'iroq qilish",
+      heroNote: "Menejerlar hozir onlayn · har kuni 9:00–21:00",
+      statYears: "yil aviachiptalar bozorida", statTickets: "sotilgan chiptalar", statMin: "daq", statReply: "o'rtacha javob vaqti",
+      howKicker: "Qanday ishlaydi", howTitle: "Uch qadam — va e-chipta qo'lingizda",
+      howSub: "Sayt hech narsa sotmaydi. Hammasi Telegramda — tez, jonli muloqotda va ortiqcha formalar­siz.",
+      steps: [
+        { title: "Botga yozing", desc: "Yo'nalish, sana va yo'lovchilar sonini yuboring. Ro'yxatdan o'tish shart emas." },
+        { title: "Variantlarni oling", desc: "Menejer 5 daqiqada aniq narxlar bilan 2–3 ta eng qulay variantni yuboradi." },
+        { title: "To'lang va uching", desc: "Qulay usulda to'laysiz — e-chipta darhol Telegramingizga keladi." }
+      ],
+      whyTitle: "Nega yo'lovchilar Fliptravelni tanlaydi",
+      why: [
+        { title: "24/7 qo'llab-quvvatlash", desc: "Reys kechiksa yoki reja o'zgarsa — kechasi ham javob beramiz." },
+        { title: "Rasmiy litsenziya", desc: "Ro'yxatdan o'tgan agentlik: shartnoma, chek va kafolat bilan ishlaymiz." },
+        { title: "Eng yaxshi narx kafolati", desc: "Arzonroq topsangiz — farqini qoplaymiz yoki narxni tenglashtiramiz." },
+        { title: "5 daqiqada javob", desc: "Ish vaqtida har bir so'rovga 5 daqiqa ichida javob beramiz." }
+      ],
+      destKicker: "Ommabop yo'nalishlar", destTitle: "Toshkentdan to'g'ridan-to'g'ri",
+      destSub: "Narxlar mo'ljal uchun — aniq narxni bot 5 daqiqada aytadi. Kartani bosing yoki ustiga olib boring.",
+      destFrom: "narxlar", destRound: "IQTISODIY", destNote: "bir tomonga, yig'imlar bilan",
+      destCta: "Botda so'rash", destHint: "* Narxlar mavsum va sanaga qarab o'zgaradi. Boshqa yo'nalish kerakmi? Botga yozing.",
+      revKicker: "Mijozlar fikri", revTitle: "Telegramdagi minglab suhbatlardan bir nechtasi",
+      reviews: [
+        { name: "Dilnoza R.", route: "TAS → JED · Umra", text: "4 kishiga Jidda uchun chipta oldik. Hammasi botda 20 daqiqada hal bo'ldi, narx boshqa joydagidan arzonroq chiqdi. Rahmat!", time: "14:32" },
+        { name: "Sardor A.", route: "TAS → IST", text: "Reysim bekor bo'lganda kechasi 2 da yozdim — 10 daqiqada yangi variant topib berishdi. Shunaqa servisni birinchi ko'rishim.", time: "02:14" },
+        { name: "Olga V.", route: "TAS → MOW", text: "Год покупаю билеты только здесь. Быстро, без лишних вопросов, цены честные. Рекомендую всем коллегам.", time: "11:05" },
+        { name: "Akmal T.", route: "TAS → ICN", text: "Seulga ish safari uchun shoshilinch chipta kerak edi. Ertalab yozdim — tushlikkacha chipta pochtamda edi. Zo'r!", time: "09:48" }
+      ],
+      contactKicker: "Aloqa", contactTitle: "Ofisimiz Toshkent markazida",
+      addressLabel: "Manzil", address: "Toshkent sh., Amir Temur shoh ko'chasi, 107B (Metro: Bodomzor)",
+      phoneLabel: "Telefon", hoursLabel: "Ish vaqti", hours: "Har kuni 9:00 – 21:00",
+      passKicker: "KEYINGI SAFARINGIZ", passTitle: "Bortga marhamat — chipta bir xabar narida",
+      passCta: "Chipta so'rash",
+      legalEntity: "«FLIPTRAVEL» MChJ", license: "Litsenziya",
+      stickyCta: "Botga yozish"
+    },
+    ru: {
+      navHow: "Как это работает", navDest: "Направления", navRev: "Отзывы", navContact: "Контакты", navCta: "Написать в бот",
+      heroEyebrow: "Ташкент · Официальная авиакасса · с 2017 года",
+      heroTitle1: "В любую точку мира —", heroTitle2: "одним сообщением",
+      heroSub: "Fliptravel — официальное агентство авиабилетов. Никакого поиска и ожидания: напишите направление в Telegram-бот — менеджер за 5 минут пришлёт варианты по лучшим ценам.",
+      ctaMain: "Запросить билет в Telegram", ctaCall: "Позвонить",
+      heroNote: "Менеджеры сейчас онлайн · ежедневно 9:00–21:00",
+      statYears: "лет на рынке авиабилетов", statTickets: "проданных билетов", statMin: "мин", statReply: "среднее время ответа",
+      howKicker: "Как это работает", howTitle: "Три шага — и e-билет у вас",
+      howSub: "Сайт ничего не продаёт. Всё происходит в Telegram — быстро, в живом диалоге и без лишних форм.",
+      steps: [
+        { title: "Напишите в бот", desc: "Отправьте направление, даты и число пассажиров. Без регистрации." },
+        { title: "Получите варианты", desc: "Менеджер за 5 минут пришлёт 2–3 лучших варианта с точными ценами." },
+        { title: "Оплатите и летите", desc: "Оплата любым удобным способом — e-билет сразу приходит в Telegram." }
+      ],
+      whyTitle: "Почему пассажиры выбирают Fliptravel",
+      why: [
+        { title: "Поддержка 24/7", desc: "Задержали рейс или изменились планы — ответим даже ночью." },
+        { title: "Официальная лицензия", desc: "Зарегистрированное агентство: договор, чек и гарантии." },
+        { title: "Гарантия лучшей цены", desc: "Нашли дешевле — вернём разницу или сравняем цену." },
+        { title: "Ответ за 5 минут", desc: "В рабочее время отвечаем на каждый запрос в течение 5 минут." }
+      ],
+      destKicker: "Популярные направления", destTitle: "Прямо из Ташкента",
+      destSub: "Цены ориентировочные — точную бот назовёт за 5 минут. Нажмите на карточку или наведите курсор.",
+      destFrom: "цены от", destRound: "ЭКОНОМ", destNote: "в одну сторону, со сборами",
+      destCta: "Спросить в боте", destHint: "* Цены зависят от сезона и дат. Нужно другое направление? Напишите в бот.",
+      revKicker: "Отзывы", revTitle: "Несколько из тысяч диалогов в Telegram",
+      reviews: [
+        { name: "Дильноза Р.", route: "TAS → JED · Умра", text: "Брали билеты в Джидду на четверых. Всё решилось в боте за 20 минут, цена вышла ниже, чем в других местах. Спасибо!", time: "14:32" },
+        { name: "Сардор А.", route: "TAS → IST", text: "Когда отменили рейс, написал в 2 часа ночи — за 10 минут нашли новый вариант. Такой сервис вижу впервые.", time: "02:14" },
+        { name: "Ольга В.", route: "TAS → MOW", text: "Год покупаю билеты только здесь. Быстро, без лишних вопросов, цены честные. Рекомендую всем коллегам.", time: "11:05" },
+        { name: "Акмаль Т.", route: "TAS → ICN", text: "Срочно нужен был билет в Сеул в командировку. Написал утром — к обеду билет был на почте. Отлично!", time: "09:48" }
+      ],
+      contactKicker: "Контакты", contactTitle: "Наш офис в центре Ташкента",
+      addressLabel: "Адрес", address: "г. Ташкент, пр-т Амира Темура, 107Б (метро Бадамзар)",
+      phoneLabel: "Телефон", hoursLabel: "Режим работы", hours: "Ежедневно 9:00 – 21:00",
+      passKicker: "ВАШ СЛЕДУЮЩИЙ РЕЙС", passTitle: "Добро пожаловать на борт — билет в одном сообщении",
+      passCta: "Запросить билет",
+      legalEntity: "ООО «FLIPTRAVEL»", license: "Лицензия",
+      stickyCta: "Написать в бот"
+    },
+    en: {
+      navHow: "How it works", navDest: "Destinations", navRev: "Reviews", navContact: "Contact", navCta: "Message the bot",
+      heroEyebrow: "Tashkent · Licensed air ticket agency · since 2017",
+      heroTitle1: "Fly anywhere in the world —", heroTitle2: "with a single message",
+      heroSub: "Fliptravel is an officially licensed air ticket agency. No search engines, no waiting: send your route to our Telegram bot and a manager will reply within 5 minutes with the best available fares.",
+      ctaMain: "Request a ticket on Telegram", ctaCall: "Call us",
+      heroNote: "Managers are online now · daily 9:00–21:00",
+      statYears: "years in the air ticket market", statTickets: "tickets issued", statMin: "min", statReply: "average response time",
+      howKicker: "How it works", howTitle: "Three steps to your e-ticket",
+      howSub: "This website sells nothing. Everything happens on Telegram — fast, in a live conversation, with no forms to fill in.",
+      steps: [
+        { title: "Message the bot", desc: "Send your route, dates and number of passengers. No sign-up required." },
+        { title: "Receive your options", desc: "Within 5 minutes a manager sends 2–3 best options with exact prices." },
+        { title: "Pay and fly", desc: "Pay however is convenient — your e-ticket arrives instantly on Telegram." }
+      ],
+      whyTitle: "Why travellers choose Fliptravel",
+      why: [
+        { title: "24/7 support", desc: "Delayed flight or a change of plans — we respond even at night." },
+        { title: "Official licence", desc: "A registered agency: contract, receipt and full guarantees." },
+        { title: "Best-price guarantee", desc: "Found it cheaper? We refund the difference or match the fare." },
+        { title: "Reply within 5 minutes", desc: "During working hours, every request is answered within 5 minutes." }
+      ],
+      destKicker: "Popular destinations", destTitle: "Direct from Tashkent",
+      destSub: "Prices are indicative — the bot will quote an exact fare within 5 minutes. Tap or hover a card.",
+      destFrom: "fares from", destRound: "ECONOMY", destNote: "one way, taxes included",
+      destCta: "Ask in the bot", destHint: "* Fares vary by season and dates. Need a different route? Just message the bot.",
+      revKicker: "Reviews", revTitle: "A few of thousands of Telegram conversations",
+      reviews: [
+        { name: "Dilnoza R.", route: "TAS → JED · Umrah", text: "We booked Jeddah tickets for four. Everything was settled in the bot within 20 minutes, and the fare was lower than elsewhere. Thank you!", time: "14:32" },
+        { name: "Sardor A.", route: "TAS → IST", text: "When my flight was cancelled I messaged at 2 a.m. — they found a new option in 10 minutes. First time I've seen service like this.", time: "02:14" },
+        { name: "Olga V.", route: "TAS → MOW", text: "I've been buying tickets here for a year. Fast, no unnecessary questions, honest prices. I recommend them to all my colleagues.", time: "11:05" },
+        { name: "Akmal T.", route: "TAS → ICN", text: "Needed an urgent ticket to Seoul for a business trip. Messaged in the morning — the ticket was in my inbox by lunch. Excellent!", time: "09:48" }
+      ],
+      contactKicker: "Contact", contactTitle: "Our office in central Tashkent",
+      addressLabel: "Address", address: "107B Amir Temur Avenue, Tashkent (Bodomzor metro)",
+      phoneLabel: "Phone", hoursLabel: "Working hours", hours: "Daily 9:00 – 21:00",
+      passKicker: "YOUR NEXT FLIGHT", passTitle: "Welcome aboard — your ticket is one message away",
+      passCta: "Request a ticket",
+      legalEntity: "FLIPTRAVEL LLC", license: "Licence",
+      stickyCta: "Message the bot"
+    }
+  };
+
+  DEST_META = [
+    { code: 'IST', key: 'IST', bg: 'linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)', names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
+    { code: 'DXB', key: 'DXB', bg: 'linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)', names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
+    { code: 'MOW', key: 'MOW', bg: 'linear-gradient(155deg,#1B2B4A 0%,#2E4A6E 60%,#7A93B5 100%)', names: { uz: ['Moskva', 'Rossiya'], ru: ['Москва', 'Россия'], en: ['Moscow', 'Russia'] } },
+    { code: 'JED', key: 'JED', bg: 'linear-gradient(155deg,#123A34 0%,#2E6B54 55%,#C9A86A 100%)', names: { uz: ['Jidda', 'Saudiya Arabistoni'], ru: ['Джидда', 'Саудовская Аравия'], en: ['Jeddah', 'Saudi Arabia'] } },
+    { code: 'ICN', key: 'ICN', bg: 'linear-gradient(155deg,#1E2B50 0%,#4A3A6E 55%,#B56B8A 100%)', names: { uz: ['Seul', 'Janubiy Koreya'], ru: ['Сеул', 'Южная Корея'], en: ['Seoul', 'South Korea'] } },
+    { code: 'ALA', key: 'ALA', bg: 'linear-gradient(155deg,#14324A 0%,#2E5E6E 55%,#6BAB9C 100%)', names: { uz: ['Almati', 'Qozog\u02bciston'], ru: ['Алматы', 'Казахстан'], en: ['Almaty', 'Kazakhstan'] } }
+  ];
+
+  AVATAR_BGS = ['#7DD3FC', '#FFB43A', '#A5B4FC', '#6EE7B7'];
+
+  state = {
+    lang: 'uz',
+    scrolled: false,
+    isMobile: typeof window !== 'undefined' && window.innerWidth < 900,
+    footerVisible: false,
+    flipped: {}
+  };
+
+  constructor(props) {
+    super(props);
+    this.pathSvgRef = React.createRef();
+    this.pathDrawRef = React.createRef();
+    this.planeRef = React.createRef();
+    this.magneticRef = React.createRef();
+    this.footerRef = React.createRef();
+    this.runwayPlaneRef = React.createRef();
+    try {
+      const saved = localStorage.getItem('ft_lang');
+      if (saved && this.DICTS[saved]) this.state.lang = saved;
+    } catch (e) {}
+  }
+
+  reduced() {
+    return true; // print copy: freeze all motion at end state
+    if (this.props.calmMotion) return true;
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  componentDidMount() {
+    document.title = 'Fliptravel — aviachiptalar Telegramda';
+    const EASE = 'cubic-bezier(0.22,1,0.36,1)';
+    const reduced = this.reduced();
+
+    // ---- Takeoff intro (≤1.2s, WAAPI — never re-triggers on re-render) ----
+    const logo = document.querySelector('[data-intro-logo]');
+    if (logo && !reduced) {
+      logo.animate([{ transform: 'rotateY(180deg) scale(.6)', opacity: 0 }, { transform: 'rotateY(0deg) scale(1)', opacity: 1 }], { duration: 550, easing: EASE, fill: 'backwards' });
+    }
+    document.querySelectorAll('[data-intro]').forEach(el => {
+      const i = +el.getAttribute('data-intro');
+      if (reduced) {
+        el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: i * 40, fill: 'backwards' });
+      } else {
+        el.animate(
+          [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 600, delay: 120 + i * 95, easing: EASE, fill: 'backwards' }
+        );
+      }
+    });
+
+    // ---- Scroll-once reveals ----
+    const reveals = document.querySelectorAll('[data-reveal]');
+    reveals.forEach(el => {
+      const r = el.getBoundingClientRect();
+      return; // print copy: never hide reveal elements
+      el.style.opacity = '0';
+      el.__hidden = true;
+    });
+    this.revealIO = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        this.revealIO.unobserve(el);
+        if (!el.__hidden) return;
+        const delay = +(el.getAttribute('data-delay') || 0);
+        const anim = reduced
+          ? el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay, fill: 'backwards' })
+          : el.animate([{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 550, delay, easing: EASE, fill: 'backwards' });
+        el.style.opacity = '';
+        el.__hidden = false;
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => this.revealIO.observe(el));
+
+    // ---- Count-ups (once) ----
+    this.countIO = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        this.countIO.unobserve(el);
+        const target = +el.getAttribute('data-countto');
+        if (reduced) { el.textContent = this.fmt(target); return; }
+        const t0 = performance.now(), dur = 1400;
+        const tick = now => {
+          const p = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = this.fmt(Math.round(target * eased));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-countto]').forEach(el => { el.textContent = this.fmt(+el.getAttribute('data-countto')); });
+
+    // ---- Flight path: scroll-linked draw + plane glyph ----
+    const drawPath = this.pathDrawRef.current;
+    this.pathLen = drawPath ? drawPath.getTotalLength() : 0;
+    this.onScroll = () => {
+      if (this.scrollRaf) return;
+      this.scrollRaf = requestAnimationFrame(() => {
+        this.scrollRaf = null;
+        this.updateFlight();
+        const sc = window.scrollY > 100;
+        if (sc !== this.state.scrolled) this.setState({ scrolled: sc });
+      });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    if (reduced && drawPath) drawPath.style.strokeDashoffset = '0';
+    this.updateFlight();
+
+    // ---- Footer visibility (sticky CTA hide + runway plane settle) ----
+    this.footerIO = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting !== this.state.footerVisible) this.setState({ footerVisible: en.isIntersecting });
+        if (en.isIntersecting && !this.runwayDone) {
+          this.runwayDone = true;
+          const p = this.runwayPlaneRef.current;
+          if (p) {
+            if (reduced) { p.style.opacity = '1'; p.style.transform = 'translateX(0)'; }
+            else p.animate(
+              [{ opacity: 0, transform: 'translateX(-90px) translateY(-14px) rotate(6deg)' }, { opacity: 1, transform: 'translateX(0) translateY(0) rotate(0deg)' }],
+              { duration: 900, easing: EASE, fill: 'forwards' }
+            );
+          }
+        }
+      });
+    }, { threshold: 0.05 });
+    if (this.footerRef.current) this.footerIO.observe(this.footerRef.current);
+
+    // ---- Magnetic CTA (pointer: fine only) ----
+    const btn = this.magneticRef.current;
+    const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    if (btn && fine && !reduced) {
+      this.onMagMove = e => {
+        const r = btn.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        const dist = Math.hypot(dx, dy);
+        if (dist < 130) {
+          const f = (1 - dist / 130) * 0.35;
+          btn.style.transform = `translate(${dx * f}px, ${dy * f}px)`;
+          const icon = btn.querySelector('[data-plane-icon]');
+          if (icon) icon.style.transform = 'rotate(-14deg)';
+        } else {
+          btn.style.transform = '';
+          const icon = btn.querySelector('[data-plane-icon]');
+          if (icon) icon.style.transform = '';
+        }
+      };
+      window.addEventListener('mousemove', this.onMagMove, { passive: true });
+    }
+
+    // ---- Resize ----
+    this.onResize = () => {
+      const m = window.innerWidth < 900;
+      if (m !== this.state.isMobile) this.setState({ isMobile: m });
+      this.updateFlight();
+    };
+    window.addEventListener('resize', this.onResize, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
+    if (this.onMagMove) window.removeEventListener('mousemove', this.onMagMove);
+    if (this.revealIO) this.revealIO.disconnect();
+    if (this.countIO) this.countIO.disconnect();
+    if (this.footerIO) this.footerIO.disconnect();
+  }
+
+  updateFlight() {
+    const svg = this.pathSvgRef.current, path = this.pathDrawRef.current, plane = this.planeRef.current;
+    if (!svg || !path || !plane) return;
+    const host = svg.parentElement; // the absolute overlay covering <main>
+    const rect = host.getBoundingClientRect();
+    const top = rect.top + window.scrollY, h = rect.height, w = rect.width;
+    const vh = window.innerHeight;
+    let p = (window.scrollY + vh * 0.55 - top) / h;
+    p = Math.max(0, Math.min(1, p));
+    if (this.reduced()) p = 1;
+    else path.style.strokeDashoffset = String(1 - p);
+    // plane position along viewBox path (0..1000 length units of pathLength? use real length)
+    const L = this.pathLen * p;
+    const pt = path.getPointAtLength(L);
+    const pt2 = path.getPointAtLength(Math.min(this.pathLen, L + 0.5));
+    const x = pt.x / 100 * w, y = pt.y / 100 * h;
+    const dx = (pt2.x - pt.x) / 100 * w, dy = (pt2.y - pt.y) / 100 * h;
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    if (this.reduced()) { plane.style.opacity = '0'; return; }
+    plane.style.opacity = p > 0.005 && p < 0.995 ? '0.9' : '0';
+    plane.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${ang}deg)`;
+  }
+
+  fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u2009'); }
+
+  setLang(code) {
+    if (code === this.state.lang) return;
+    try { localStorage.setItem('ft_lang', code); } catch (e) {}
+    // flip the pressed language button (brand motif)
+    const btns = document.querySelectorAll('[role="group"][aria-label="Language"] button');
+    btns.forEach(b => {
+      if (b.textContent.toLowerCase() === code) {
+        b.animate([{ transform: 'rotateX(90deg)' }, { transform: 'rotateX(0deg)' }], { duration: 400, easing: 'cubic-bezier(0.22,1,0.36,1)' });
+      }
+    });
+    this.setState({ lang: code });
+  }
+
+  renderVals() {
+    const { lang, scrolled, isMobile, footerVisible, flipped } = this.state;
+    const t = this.DICTS[lang];
+    const accent = this.props.accentColor ?? '#FFB43A';
+    const reduced = this.reduced();
+
+    const steps = t.steps.map((s, i) => ({
+      ...s, num: '0' + (i + 1), code: ['MSG', 'RCV', 'FLY'][i], delay: i * 90,
+      link: this.CONFIG.bot + '?start=site_steps'
+    }));
+
+    const whyItems = t.why.map((w, i) => ({ ...w, delay: i * 80, glyph: ['24/7', 'LIC', '$=', '5\u2032'][i] }));
+
+    const destinations = this.DEST_META.map((d, i) => {
+      const [name, country] = d.names[lang];
+      const isFlipped = !!flipped[d.code];
+      return {
+        code: d.code, bg: d.bg, name, country, delay: (i % 3) * 90,
+        price: '$' + this.CONFIG.prices[d.key],
+        flipT: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+        aria: `${name} — ${t.destFrom} $${this.CONFIG.prices[d.key]}`,
+        link: this.CONFIG.bot + '?start=site_destinations',
+        toggle: () => this.setState(s => ({ flipped: { ...s.flipped, [d.code]: !s.flipped[d.code] } })),
+        onKey: e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.setState(s => ({ flipped: { ...s.flipped, [d.code]: !s.flipped[d.code] } }));
+          }
+        }
+      };
+    });
+
+    const reviews = t.reviews.map((r, i) => ({
+      ...r, delay: (i % 2) * 90, initial: r.name.charAt(0), avatarBg: this.AVATAR_BGS[i % 4]
+    }));
+
+    const langBtn = code => ({
+      bg: lang === code ? 'rgba(125,211,252,.16)' : 'transparent',
+      color: lang === code ? '#EAF2FC' : '#66799A'
+    });
+
+    const showSticky = (this.props.showStickyCta ?? true) && isMobile && !footerVisible;
+
+    return {
+      t, accent,
+      accentGlow: accent + '73',
+      steps, whyItems, destinations, reviews,
+      // header
+      headerBg: scrolled ? 'rgba(8,17,32,.78)' : 'transparent',
+      headerBlur: scrolled ? 'blur(14px)' : 'none',
+      headerLine: scrolled ? 'rgba(159,179,204,.12)' : 'transparent',
+      navDisplay: isMobile ? 'none' : 'flex',
+      // language switcher
+      setUz: () => this.setLang('uz'), setRu: () => this.setLang('ru'), setEn: () => this.setLang('en'),
+      isUz: lang === 'uz', isRu: lang === 'ru', isEn: lang === 'en',
+      uzBg: langBtn('uz').bg, uzColor: langBtn('uz').color,
+      ruBg: langBtn('ru').bg, ruColor: langBtn('ru').color,
+      enBg: langBtn('en').bg, enColor: langBtn('en').color,
+      // refs
+      pathSvgRef: this.pathSvgRef, pathDrawRef: this.pathDrawRef, planeRef: this.planeRef,
+      magneticRef: this.magneticRef, footerRef: this.footerRef, runwayPlaneRef: this.runwayPlaneRef,
+      // ambient animations (frozen under reduced motion)
+      driftA: reduced ? 'none' : 'ftDriftA 26s ease-in-out infinite',
+      driftB: reduced ? 'none' : 'ftDriftB 32s ease-in-out infinite',
+      pulseAnim: reduced ? 'none' : 'ftPulse 2.6s ease-out infinite',
+      // telegram deep links per section
+      tgHeader: this.CONFIG.bot + '?start=site_header',
+      tgHero: this.CONFIG.bot + '?start=site_hero',
+      tgFooter: this.CONFIG.bot + '?start=site_footer',
+      tgSticky: this.CONFIG.bot + '?start=site_sticky',
+      stopClick: e => e.stopPropagation(),
+      // sticky CTA
+      stickyDisplay: isMobile ? 'inline-flex' : 'none',
+      stickyY: showSticky ? '0' : '90px',
+      stickyOpacity: showSticky ? '1' : '0'
+    };
+  }
+}
+</script>
+<style>
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+@page { size: letter; margin: 0; }
+@media print {
+  html { scroll-behavior: auto; }
+  body { padding: 0; }
+  *, *::before, *::after {
+    animation-delay: -99s !important; animation-duration: .001s !important;
+    animation-iteration-count: 1 !important; animation-fill-mode: both !important;
+    animation-play-state: running !important; transition-duration: 0s !important;
+  }
+  header { position: absolute !important; background: rgba(8,17,32,.92) !important; border-bottom-color: rgba(159,179,204,.12) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  [data-reveal] { opacity: 1 !important; break-inside: avoid; }
+  [data-intro], [data-intro-logo] { opacity: 1 !important; }
+  section[id="hero"] { min-height: auto !important; padding-top: 130px !important; padding-bottom: 70px !important; }
+  a[href*="site_sticky"] { display: none !important; }
+  h1, h2, h3 { break-after: avoid; }
+  section { break-inside: auto; }
+  p, dd, li { orphans: 3; widows: 3; }
+  footer { break-inside: avoid; }
+}
+</style>
+<script>
+addEventListener('load', () => {
+  (async () => {
+    try { await document.fonts.ready; } catch (e) {}
+    // wait for the DC runtime to mount content
+    const t0 = Date.now();
+    while (Date.now() - t0 < 8000) {
+      if (document.querySelector('footer')) break;
+      await new Promise(r => setTimeout(r, 120));
+    }
+    const imgs = Array.from(document.images).filter((i) => !i.complete);
+    await Promise.race([
+      Promise.allSettled(imgs.map((i) => i.decode())),
+      new Promise((r) => setTimeout(r, 8000)),
+    ]);
+    // fixups: settle the runway plane, hide the scroll-following plane
+    setTimeout(() => {
+      document.querySelectorAll('footer div').forEach(d => { if (d.style.willChange === 'transform') { d.style.opacity = '1'; d.style.transform = 'none'; } });
+      document.querySelectorAll('main div').forEach(d => { if (d.style.willChange === 'transform') { d.style.opacity = '0'; } });
+      window.print();
+    }, 700);
+  })();
+});
+</script>
+</body>
+</html>
