@@ -231,6 +231,12 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .sticky-cta.away{transform:translateX(-50%) translateY(90px);opacity:0}
 @media (max-width:899px){.sticky-cta{display:inline-flex}}
 
+@media print{
+  [data-reveal],[data-intro],[data-intro-logo]{opacity:1!important;transform:none!important}
+  .site-header{position:absolute!important;background:#0B1526!important}
+  .sticky-cta,.flight-layer,.brand-icon::before,.brand-icon::after{display:none!important}
+  .hero{min-height:auto!important;padding-top:120px!important}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .orb-a,.orb-b,.orb-c,.brand-icon::before,.brand-icon::after,.map-pin-in .pulse{animation:none}
