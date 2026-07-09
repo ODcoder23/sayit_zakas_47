@@ -142,7 +142,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .dest-face{position:absolute;inset:0;border-radius:20px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .dest-front{border:1px solid rgba(159,179,204,.14)}
 .dest-bg{position:absolute;inset:0;transform:scale(1);transition:transform 6s ease-out}
-.dest:hover .dest-bg{transform:scale(1.08)}
+@media (hover:hover) and (pointer:fine){.dest:hover .dest-bg{transform:scale(1.08)}}
 .dest-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,32,.05) 30%,rgba(8,17,32,.72))}
 .dest-route{position:absolute;top:20px;left:22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(234,242,252,.75)}
 .dest-code{position:absolute;top:44%;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:64px;letter-spacing:.06em;color:rgba(234,242,252,.16);transform:translateY(-50%)}
