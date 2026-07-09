@@ -62,7 +62,11 @@ button{font:inherit}
 .lang-group button[aria-pressed="true"]{background:rgba(217,172,78,.18);color:var(--ink)}
 .btn-header{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#EDC878,#C9962E);color:#1A1204;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:999px;transition:transform .25s var(--ease)}
 .btn-header:hover{transform:translateY(-1px);color:#1A1204}
-@media (max-width:899px){.mainnav,.btn-header{display:none}}
+@media (max-width:899px){
+  .mainnav,.btn-header{display:none}
+  .hero{padding-bottom:140px}
+  .lang-group button{padding:8px 11px}
+}
 
 /* ============ FLIGHT PATH ============ */
 .flight-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
