@@ -194,7 +194,11 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .contact-phone:hover{color:var(--gold-light)}
 .soft-link{color:var(--muted)}
 .soft-link:hover{color:var(--gold-light)}
-.map-card{position:relative;min-height:380px;border-radius:22px;overflow:hidden;border:1px solid rgba(159,179,204,.14);background:linear-gradient(150deg,#0C1A30,#081120)}
+.map-card{display:block;position:relative;min-height:380px;border-radius:22px;overflow:hidden;border:1px solid rgba(159,179,204,.14);background:linear-gradient(150deg,#0C1A30,#081120);color:inherit;text-decoration:none;cursor:pointer;transition:border-color .3s ease,transform .3s var(--ease)}
+.map-card:hover{border-color:rgba(217,172,78,.5);transform:translateY(-3px);color:inherit}
+.map-open{position:absolute;left:18px;bottom:16px;display:inline-flex;align-items:center;gap:7px;background:rgba(8,17,32,.85);border:1px solid rgba(217,172,78,.35);border-radius:999px;padding:7px 13px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--gold);transition:background .25s,border-color .25s}
+.map-card:hover .map-open{background:rgba(217,172,78,.16);border-color:rgba(217,172,78,.7)}
+.map-card:hover .map-pin-in .core{box-shadow:0 0 0 4px rgba(217,172,78,.2)}
 .map-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(125,211,252,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.05) 1px,transparent 1px);background-size:44px 44px}
 .map-roads{position:absolute;inset:0;background-image:linear-gradient(115deg,transparent 47%,rgba(125,211,252,.09) 47.5%,rgba(125,211,252,.09) 48.5%,transparent 49%),linear-gradient(24deg,transparent 61%,rgba(125,211,252,.07) 61.5%,rgba(125,211,252,.07) 62.5%,transparent 63%)}
 .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
@@ -202,7 +206,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .map-pin-in .pulse{position:absolute;inset:0;border-radius:50%;background:var(--accent);animation:ftPulse 2.6s ease-out infinite}
 .map-pin-in .core{position:absolute;inset:0;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
 .map-label{position:absolute;top:54%;left:50%;transform:translateX(-50%);margin-top:16px;background:rgba(8,17,32,.85);border:1px solid rgba(159,179,204,.2);border-radius:10px;padding:8px 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#C7D6E8;white-space:nowrap}
-.map-coord{position:absolute;left:18px;bottom:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
+.map-coord{position:absolute;right:18px;bottom:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
 .map-city{position:absolute;right:18px;top:16px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--dim)}
 
 /* ============ FOOTER ============ */
@@ -442,7 +446,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
           </div>
         </dl>
       </div>
-      <div class="map-card" data-reveal data-delay="120">
+      <a class="map-card" data-reveal data-delay="120" href="https://yandex.uz/maps/?ll=69.337699%2C41.340022&z=18&pt=69.337699%2C41.340022%2Cpm2rdm" target="_blank" rel="noopener" aria-label="Fliptravel ofisi — Yandex Maps'da ochish">
         <div class="map-grid-bg" aria-hidden="true"></div>
         <div class="map-roads" aria-hidden="true"></div>
         <div class="map-pin">
@@ -451,10 +455,14 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
             <span class="core"></span>
           </div>
         </div>
-        <div class="map-label">FLIPTRAVEL · TAS</div>
-        <div class="map-coord">41.2995° N · 69.2401° E</div>
+        <div class="map-label">FLIP TRAVEL · Mo'minov 10</div>
+        <div class="map-coord">41.340022° N · 69.337699° E</div>
         <div class="map-city">TASHKENT</div>
-      </div>
+        <span class="map-open">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8"></circle></svg>
+          <span data-t="mapOpen">Yandex Maps'da ochish</span>
+        </span>
+      </a>
     </div>
   </section>
 </main>
@@ -573,6 +581,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       addressLabel: "Manzil", address: "Toshkent sh., Mirzo Ulug'bek tumani, Mo'minov ko'chasi, 10",
       phoneLabel: "Telefon", hoursLabel: "Ish vaqti", hours: "Du–Shan 10:00 – 19:00",
       directorLabel: "Direktor", director: "Turarxojayev Saidaxmad Muhammadzokir o'g'li",
+      mapOpen: "Yandex Maps'da ochish",
       passKicker: "KEYINGI SAFARINGIZ", passTitle: "Bortga marhamat — chipta bir xabar narida",
       passCta: "Chipta so'rash",
       legalEntity: "«FLIPTRAVEL» MChJ", license: "Litsenziya",
@@ -615,6 +624,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       addressLabel: "Адрес", address: "г. Ташкент, Мирзо-Улугбекский р-н, ул. Муминова, 10",
       phoneLabel: "Телефон", hoursLabel: "Режим работы", hours: "Пн–Сб 10:00 – 19:00",
       directorLabel: "Директор", director: "Турархожаев Саидахмад Мухаммадзокир угли",
+      mapOpen: "Открыть в Яндекс Картах",
       passKicker: "ВАШ СЛЕДУЮЩИЙ РЕЙС", passTitle: "Добро пожаловать на борт — билет в одном сообщении",
       passCta: "Запросить билет",
       legalEntity: "ООО «FLIPTRAVEL»", license: "Лицензия",
@@ -657,6 +667,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       addressLabel: "Address", address: "10 Mominov Street, Mirzo Ulugbek district, Tashkent",
       phoneLabel: "Phone", hoursLabel: "Working hours", hours: "Mon–Sat 10:00 – 19:00",
       directorLabel: "Director", director: "Turarkhojayev Saidakhmad Mukhammadzokir ugli",
+      mapOpen: "Open in Yandex Maps",
       passKicker: "YOUR NEXT FLIGHT", passTitle: "Welcome aboard — your ticket is one message away",
       passCta: "Request a ticket",
       legalEntity: "FLIPTRAVEL LLC", license: "Licence",
