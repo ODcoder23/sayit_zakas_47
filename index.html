@@ -297,7 +297,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   <div class="flight-layer" aria-hidden="true">
     <svg id="pathSvg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
       <path d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(125,211,252,.13)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="3 5" stroke-linecap="round" pathLength="1000"></path>
-      <path id="pathDraw" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(56,189,248,.38)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+      <path id="pathDraw" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(217,172,78,.5)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
       <path id="tail1" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(217,172,78,.18)" stroke-width="3" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="0 2" stroke-dashoffset="0" opacity="0"></path>
       <path id="tail2" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(230,185,90,.42)" stroke-width="2.2" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="0 2" stroke-dashoffset="0" opacity="0"></path>
       <path id="tail3" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(242,208,125,.9)" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="0 2" stroke-dashoffset="0" opacity="0"></path>
@@ -879,7 +879,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       return;
     }
     pathDraw.style.strokeDashoffset = String(1 - p);
-    var flying = (p > 0.005 && p < 0.995) ? '1' : '0';
+    var flying = (p < 0.995) ? '1' : '0';
     TAILS.forEach(function (t) {
       var start = Math.max(0, p - t[1]);
       t[0].style.strokeDasharray = (p - start) + ' 2';
@@ -892,7 +892,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     var x = pt.x / 100 * w, y = pt.y / 100 * h;
     var dx = (pt2.x - pt.x) / 100 * w, dy = (pt2.y - pt.y) / 100 * h;
     var ang = Math.atan2(dy, dx) * 180 / Math.PI;
-    plane.style.opacity = (p > 0.005 && p < 0.995) ? '0.9' : '0';
+    plane.style.opacity = (p < 0.995) ? '0.9' : '0';
     plane.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + ang + 'deg)';
   }
 
