@@ -130,6 +130,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 
 /* destination flip cards */
 .dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+@media (min-width:1000px){.dest-grid{grid-template-columns:repeat(3,1fr)}}
 .dest{perspective:1400px;cursor:pointer;outline-offset:4px}
 .dest-inner{position:relative;height:340px;transform-style:preserve-3d;transform:rotateY(0deg);transition:transform .65s var(--ease)}
 .dest.flipped .dest-inner{transform:rotateY(180deg)}
