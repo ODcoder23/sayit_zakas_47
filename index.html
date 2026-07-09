@@ -52,7 +52,7 @@ button{font:inherit}
 .site-header{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
 .site-header.scrolled{background:rgba(8,17,32,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
 .header-in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);padding:5px 14px 5px 6px;border-radius:16px;background:radial-gradient(130% 170% at 32% 50%,rgba(3,8,16,.72),rgba(3,8,16,0) 78%)}
 .brand-icon{position:relative;display:inline-flex;flex:none}
 .brand-icon::before{content:"";position:absolute;z-index:0;left:50%;top:50%;width:66px;height:66px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,205,120,.42),rgba(230,160,60,.16) 48%,transparent 76%);filter:blur(9px);animation:ftSunBreath 6.5s ease-in-out infinite;pointer-events:none}
 .brand-icon::after{content:"";position:absolute;z-index:0;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,200,110,.5);box-shadow:0 0 6px rgba(255,170,60,.2);filter:blur(.6px);animation:ftSunWave 4.2s ease-out infinite;pointer-events:none}
@@ -81,7 +81,7 @@ button{font:inherit}
 /* ============ FLIGHT PATH ============ */
 .flight-layer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .flight-layer svg{position:absolute;inset:0;display:block}
-.flight-plane{position:absolute;top:0;left:0;width:26px;height:26px;margin:-13px 0 0 -13px;opacity:0;will-change:transform}
+.flight-plane{position:absolute;top:0;left:0;width:34px;height:34px;margin:-17px 0 0 -17px;opacity:0;will-change:transform}
 
 /* ============ HERO ============ */
 .hero{position:relative;z-index:1;min-height:92vh;min-height:92svh;display:flex;align-items:center;overflow:hidden;padding:140px 24px 90px}
@@ -213,7 +213,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .runway{position:relative;height:74px;max-width:1200px;margin:0 auto;padding:0 24px}
 .runway-line{position:absolute;left:24px;right:24px;top:50%;height:2px;background:repeating-linear-gradient(90deg,rgba(125,211,252,.28) 0 34px,transparent 34px 58px)}
 .runway-labels{position:absolute;left:24px;right:24px;top:calc(50% - 13px);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--faint)}
-.runway-plane{position:absolute;top:calc(50% - 12px);left:12%;opacity:0;will-change:transform}
+.pass-plane{position:absolute;top:-14px;right:34px;z-index:2;opacity:0;will-change:transform;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
 .pass-wrap{max-width:1200px;margin:0 auto;padding:30px 24px 0;display:flex;justify-content:center}
 .pass{width:100%;max-width:680px;background:#F4F1E9;color:#141B26;border-radius:18px;position:relative;box-shadow:0 30px 70px -30px rgba(0,0,0,.7)}
 .pass-head{padding:24px 28px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -250,6 +250,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   [data-reveal],[data-intro],[data-intro-logo]{opacity:1!important;transform:none!important}
   .site-header{position:absolute!important;background:#0B1526!important}
   .sticky-cta,.flight-layer,.brand-icon::before,.brand-icon::after{display:none!important}
+  .pass-plane{opacity:1!important;transform:none!important}
   .hero{min-height:auto!important;padding-top:120px!important}
 }
 @media (prefers-reduced-motion:reduce){
@@ -296,10 +297,10 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   <div class="flight-layer" aria-hidden="true">
     <svg id="pathSvg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
       <path d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(125,211,252,.13)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-dasharray="3 5" stroke-linecap="round" pathLength="1000"></path>
-      <path id="pathDraw" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(56,189,248,.38)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
+      <path id="pathDraw" d="M 50 5.5 C 88 8.5, 10 12, 28 17 S 84 24.5, 62 30 S 12 37.5, 34 43 S 88 50.5, 56 56 S 12 64, 40 70 S 86 78.5, 52 85 S 47 93, 50 98.5" fill="none" stroke="rgba(217,172,78,.6)" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"></path>
     </svg>
     <div class="flight-plane" id="flightPlane">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#E9C46A"></path></svg>
     </div>
   </div>
 
@@ -455,13 +456,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   <div class="runway" aria-hidden="true">
     <div class="runway-line"></div>
     <div class="runway-labels"><span>RWY 08L</span><span>FLIPTRAVEL INTL</span></div>
-    <div class="runway-plane" id="runwayPlane">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#7DD3FC"></path></svg>
-    </div>
   </div>
 
   <div class="pass-wrap">
     <div class="pass" data-reveal>
+      <div class="pass-plane" id="passPlane" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M21.5 12c0 .55-.45 1-1 1h-5.9l-3.9 7.03c-.18.32-.52.52-.89.52h-1.1c-.34 0-.58-.32-.49-.64L10.1 13H5.6l-1.55 2.07c-.1.13-.25.2-.41.2h-.9c-.28 0-.49-.27-.41-.54L3.4 12l-1.07-2.73c-.08-.27.13-.54.41-.54h.9c.16 0 .31.07.41.2L5.6 11h4.5L8.22 4.09c-.09-.32.15-.64.49-.64h1.1c.37 0 .71.2.89.52L14.6 11h5.9c.55 0 1 .45 1 1Z" fill="#B8862F"></path></svg>
+      </div>
       <div class="pass-head">
         <span class="pass-brand">
           <img src="img/logo-icon.png" alt="" width="582" height="375">
@@ -896,20 +897,19 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 
   // ---------- footer visibility: sticky CTA + runway plane ----------
   var sticky = document.getElementById('stickyCta');
-  var runwayPlane = document.getElementById('runwayPlane');
-  var runwayDone = false;
+  var passPlane = document.getElementById('passPlane');
+  var landed = false;
   var footerIO = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
       sticky.classList.toggle('away', en.isIntersecting);
-      if (en.isIntersecting && !runwayDone) {
-        runwayDone = true;
+      if (en.isIntersecting && !landed) {
+        landed = true;
         if (REDUCED) {
-          runwayPlane.style.opacity = '1';
-          runwayPlane.style.transform = 'translateX(0)';
+          passPlane.style.opacity = '1';
         } else {
-          runwayPlane.animate(
-            [{ opacity: 0, transform: 'translateX(-90px) translateY(-14px) rotate(6deg)' }, { opacity: 1, transform: 'translateX(0) translateY(0) rotate(0deg)' }],
-            { duration: 900, easing: EASE, fill: 'forwards' }
+          passPlane.animate(
+            [{ opacity: 0, transform: 'translate(-140px,-90px) rotate(14deg) scale(.85)' }, { opacity: 1, transform: 'translate(0,0) rotate(0deg) scale(1)' }],
+            { duration: 1100, easing: EASE, fill: 'forwards' }
           );
         }
       }
