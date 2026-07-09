@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fliptravel — aviachiptalar Telegramda</title>
-<meta name="description" content="Fliptravel — Toshkentdagi rasmiy aviakassa. Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi aviachiptalarni yuboradi.">
+<meta name="description" content="Fliptravel — dunyo bo'ylab sayohat bo'yicha rasmiy agentlik. Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.">
 <meta name="theme-color" content="#081120">
 <meta property="og:title" content="Fliptravel — aviachiptalar Telegramda">
 <meta property="og:description" content="Dunyoning istalgan nuqtasiga — bitta xabar bilan. Rasmiy aviakassa, 5 daqiqada javob.">
@@ -45,8 +45,6 @@ button{font:inherit}
 @keyframes ftDriftA{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6%,4%,0) scale(1.12)}100%{transform:translate3d(0,0,0) scale(1)}}
 @keyframes ftDriftB{0%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-5%,-3%,0) scale(1)}100%{transform:translate3d(0,0,0) scale(1.05)}}
 @keyframes ftPulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.6);opacity:0}100%{transform:scale(2.6);opacity:0}}
-@keyframes ftSunBreath{0%,100%{opacity:.28;transform:translate(-50%,-50%) scale(1)}50%{opacity:.55;transform:translate(-50%,-50%) scale(1.14)}}
-@keyframes ftSunWave{0%{transform:translate(-50%,-50%) scale(.45);opacity:0}12%{opacity:.42}100%{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
 
 /* ============ HEADER ============ */
 .site-header{position:fixed;top:0;left:0;right:0;z-index:50;background:transparent;border-bottom:1px solid transparent;transition:background .35s ease,border-color .35s ease}
@@ -54,8 +52,6 @@ button{font:inherit}
 .header-in{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
 .brand-icon{position:relative;display:inline-flex;flex:none}
-.brand-icon::before{content:"";position:absolute;z-index:0;left:50%;top:50%;width:66px;height:66px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,205,120,.42),rgba(230,160,60,.16) 48%,transparent 76%);filter:blur(9px);animation:ftSunBreath 6.5s ease-in-out infinite;pointer-events:none}
-.brand-icon::after{content:"";position:absolute;z-index:0;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,200,110,.5);box-shadow:0 0 6px rgba(255,170,60,.2);filter:blur(.6px);animation:ftSunWave 4.2s ease-out infinite;pointer-events:none}
 .brand img{position:relative;z-index:1;display:block;height:44px;width:auto}
 .brand-word{font-family:'Cinzel',serif;font-weight:500;font-size:17px;letter-spacing:.18em;line-height:1;white-space:nowrap;background:linear-gradient(180deg,#F3D68E 12%,#D9AC4E 55%,#B8862F 95%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#D9AC4E}
 .mainnav{display:flex;align-items:center;gap:28px}
@@ -110,6 +106,7 @@ button{font:inherit}
 .trust-in{padding:44px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;align-items:center}
 .stats{display:flex;gap:34px;flex-wrap:wrap}
 .stat-num{font-family:'Manrope',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em}
+.stat-num-text{font-size:25px;line-height:41px;white-space:nowrap}
 .stat-unit{font-size:20px;color:var(--muted)}
 .stat-label{font-size:13px;color:var(--muted);margin-top:2px}
 .airlines{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:flex-end;opacity:.9}
@@ -249,13 +246,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 @media print{
   [data-reveal],[data-intro],[data-intro-logo]{opacity:1!important;transform:none!important}
   .site-header{position:absolute!important;background:#0B1526!important}
-  .sticky-cta,.flight-layer,.brand-icon::before,.brand-icon::after{display:none!important}
+  .sticky-cta,.flight-layer{display:none!important}
   .pass-plane{opacity:1!important;transform:none!important}
   .hero{min-height:auto!important;padding-top:120px!important}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .orb-a,.orb-b,.orb-c,.brand-icon::before,.brand-icon::after,.map-pin-in .pulse{animation:none}
+  .orb-a,.orb-b,.orb-c,.map-pin-in .pulse{animation:none}
   .dest-inner,.dest-bg{transition:none}
 }
 </style>
@@ -316,23 +313,23 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     </div>
     <div class="hero-in">
       <div class="hero-copy">
-        <p class="hero-eyebrow" data-intro="0" data-t="heroEyebrow">Toshkent · Rasmiy aviakassa · 2017-yildan beri</p>
+        <p class="hero-eyebrow" data-intro="0" data-t="heroEyebrow">Toshkent · Dunyo bo'ylab sayohat</p>
         <h1>
           <span data-intro="1" data-t="heroTitle1">Dunyoning istalgan nuqtasiga</span>
           <span data-intro="2" class="grad" data-t="heroTitle2">bitta xabar bilan uching</span>
         </h1>
-        <p class="hero-sub" data-intro="3" data-t="heroSub">Fliptravel — aviachiptalar bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.</p>
+        <p class="hero-sub" data-intro="3" data-t="heroSub">Fliptravel — dunyo bo'ylab sayohat bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.</p>
         <div class="hero-ctas" data-intro="4">
           <a id="magneticCta" class="btn-main" href="https://t.me/fliptravelbot?start=site_hero" target="_blank" rel="noopener">
             <svg data-plane-icon width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.6 10.8c-.8.3-.75 1.44.07 1.68l4.9 1.45 1.45 4.9c.24.82 1.38.87 1.68.07L18.5 6.5" stroke="#1A1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             <span data-t="ctaMain">Telegramda chipta so'rash</span>
           </a>
-          <a class="btn-ghost" href="tel:+998712000000">
+          <a class="btn-ghost" href="tel:+998998328457">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg>
             <span data-t="ctaCall">Qo'ng'iroq qilish</span>
           </a>
         </div>
-        <p class="hero-note" data-intro="5"><span class="dot"></span><span data-t="heroNote">Menejerlar hozir onlayn · har kuni 9:00–21:00</span></p>
+        <p class="hero-note" data-intro="5"><span class="dot"></span><span data-t="heroNote">Menejerlar hozir onlayn · Du–Shan 10:00–19:00</span></p>
       </div>
     </div>
   </section>
@@ -342,12 +339,12 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     <div class="wrap trust-in">
       <div class="stats" data-reveal>
         <div>
-          <div class="stat-num"><span data-countto="9">9</span></div>
-          <div class="stat-label" data-t="statYears">yil aviachiptalar bozorida</div>
+          <div class="stat-num stat-num-text" data-t="statClassVal">Biznes → Ekonom</div>
+          <div class="stat-label" data-t="statClassLabel">chipta toifalari</div>
         </div>
         <div>
-          <div class="stat-num"><span data-countto="48000">48&#8201;000</span>+</div>
-          <div class="stat-label" data-t="statTickets">sotilgan chiptalar</div>
+          <div class="stat-num"><span data-countto="12">12</span>+</div>
+          <div class="stat-label" data-t="statRegions">viloyatdan dunyo bo'ylab</div>
         </div>
         <div>
           <div class="stat-num"><span data-countto="5">5</span><span class="stat-unit"> <span data-t="statMin">daq</span></span></div>
@@ -368,7 +365,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   <section id="how" class="section-how">
     <div class="wrap" style="padding:0">
       <p class="kicker" data-reveal data-t="howKicker">Qanday ishlaydi</p>
-      <h2 class="title" data-reveal data-delay="60" style="max-width:640px" data-t="howTitle">Uch qadam — va e-chipta qo'lingizda</h2>
+      <h2 class="title" data-reveal data-delay="60" style="max-width:640px" data-t="howTitle">Uch qadam — va maqsadga yeting</h2>
       <p class="section-sub" data-reveal data-delay="120" data-t="howSub">Sayt hech narsa sotmaydi. Hammasi Telegramda — tez, jonli muloqotda va ortiqcha formalarsiz.</p>
       <div class="steps-grid" id="stepsGrid"></div>
     </div>
@@ -411,11 +408,11 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
         <dl class="contact-dl">
           <div>
             <dt data-t="addressLabel">Manzil</dt>
-            <dd data-t="address">Toshkent sh., Amir Temur shoh ko'chasi, 107B (Metro: Bodomzor)</dd>
+            <dd data-t="address">Toshkent sh., Mirzo Ulug'bek tumani, Mo'minov ko'chasi, 10</dd>
           </div>
           <div>
             <dt data-t="phoneLabel">Telefon</dt>
-            <dd><a class="contact-phone" href="tel:+998712000000">+998 71 200-00-00</a></dd>
+            <dd><a class="contact-phone" href="tel:+998998328457">+998 99 832-84-57</a></dd>
           </div>
           <div>
             <dt>Telegram</dt>
@@ -427,13 +424,17 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
           <div>
             <dt>E-mail / Instagram</dt>
             <dd class="links">
-              <a class="soft-link" href="mailto:hello@fliptravel.uz">hello@fliptravel.uz</a>
+              <a class="soft-link" href="mailto:turaarsaidaxmad821@gmail.com">turaarsaidaxmad821@gmail.com</a>
               <a class="soft-link" href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener">@fliptravel.uz</a>
             </dd>
           </div>
           <div>
             <dt data-t="hoursLabel">Ish vaqti</dt>
-            <dd data-t="hours">Har kuni 9:00 – 21:00</dd>
+            <dd data-t="hours">Du–Shan 10:00 – 19:00</dd>
+          </div>
+          <div>
+            <dt data-t="directorLabel">Direktor</dt>
+            <dd data-t="director">Turarxojayev Saidaxmad Muhammadzokir o'g'li</dd>
           </div>
         </dl>
       </div>
@@ -501,7 +502,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       <span class="lic">STIR 000 000 000 · <span data-t="license">Litsenziya</span> № AT-000000</span>
     </div>
     <div class="legal-links">
-      <a href="tel:+998712000000">+998 71 200-00-00</a>
+      <a href="tel:+998998328457">+998 99 832-84-57</a>
       <a href="https://t.me/fliptravelbot?start=site_footer" target="_blank" rel="noopener">@fliptravelbot</a>
       <a href="https://instagram.com/fliptravel.uz" target="_blank" rel="noopener">Instagram</a>
     </div>
@@ -533,13 +534,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   var DICTS = {
     uz: {
       navHow: "Qanday ishlaydi", navDest: "Yo'nalishlar", navRev: "Fikrlar", navContact: "Aloqa", navCta: "Botga yozish",
-      heroEyebrow: "Toshkent · Rasmiy aviakassa · 2017-yildan beri",
+      heroEyebrow: "Toshkent · Dunyo bo'ylab sayohat",
       heroTitle1: "Dunyoning istalgan nuqtasiga", heroTitle2: "bitta xabar bilan uching",
-      heroSub: "Fliptravel — aviachiptalar bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.",
+      heroSub: "Fliptravel — dunyo bo'ylab sayohat bo'yicha rasmiy agentlik. Saytda qidiruv yo'q, kutish yo'q: Telegram-botga yo'nalishni yozing — menejer 5 daqiqada eng yaxshi narxlardagi variantlarni yuboradi.",
       ctaMain: "Telegramda chipta so'rash", ctaCall: "Qo'ng'iroq qilish",
-      heroNote: "Menejerlar hozir onlayn · har kuni 9:00–21:00",
-      statYears: "yil aviachiptalar bozorida", statTickets: "sotilgan chiptalar", statMin: "daq", statReply: "o'rtacha javob vaqti",
-      howKicker: "Qanday ishlaydi", howTitle: "Uch qadam — va e-chipta qo'lingizda",
+      heroNote: "Menejerlar hozir onlayn · Du–Shan 10:00–19:00",
+      statClassVal: "Biznes → Ekonom", statClassLabel: "chipta toifalari", statRegions: "viloyatdan dunyo bo'ylab", statMin: "daq", statReply: "o'rtacha javob vaqti",
+      howKicker: "Qanday ishlaydi", howTitle: "Uch qadam — va maqsadga yeting",
       howSub: "Sayt hech narsa sotmaydi. Hammasi Telegramda — tez, jonli muloqotda va ortiqcha formalarsiz.",
       steps: [
         { title: "Botga yozing", desc: "Yo'nalish, sana va yo'lovchilar sonini yuboring. Ro'yxatdan o'tish shart emas." },
@@ -565,8 +566,9 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
         { name: "Akmal T.", route: "TAS → ICN", text: "Seulga ish safari uchun shoshilinch chipta kerak edi. Ertalab yozdim — tushlikkacha chipta pochtamda edi. Zo'r!", time: "09:48" }
       ],
       contactKicker: "Aloqa", contactTitle: "Ofisimiz Toshkent markazida",
-      addressLabel: "Manzil", address: "Toshkent sh., Amir Temur shoh ko'chasi, 107B (Metro: Bodomzor)",
-      phoneLabel: "Telefon", hoursLabel: "Ish vaqti", hours: "Har kuni 9:00 – 21:00",
+      addressLabel: "Manzil", address: "Toshkent sh., Mirzo Ulug'bek tumani, Mo'minov ko'chasi, 10",
+      phoneLabel: "Telefon", hoursLabel: "Ish vaqti", hours: "Du–Shan 10:00 – 19:00",
+      directorLabel: "Direktor", director: "Turarxojayev Saidaxmad Muhammadzokir o'g'li",
       passKicker: "KEYINGI SAFARINGIZ", passTitle: "Bortga marhamat — chipta bir xabar narida",
       passCta: "Chipta so'rash",
       legalEntity: "«FLIPTRAVEL» MChJ", license: "Litsenziya",
@@ -574,13 +576,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     },
     ru: {
       navHow: "Как это работает", navDest: "Направления", navRev: "Отзывы", navContact: "Контакты", navCta: "Написать в бот",
-      heroEyebrow: "Ташкент · Официальная авиакасса · с 2017 года",
+      heroEyebrow: "Ташкент · Путешествия по всему миру",
       heroTitle1: "В любую точку мира —", heroTitle2: "одним сообщением",
-      heroSub: "Fliptravel — официальное агентство авиабилетов. Никакого поиска и ожидания: напишите направление в Telegram-бот — менеджер за 5 минут пришлёт варианты по лучшим ценам.",
+      heroSub: "Fliptravel — официальное агентство путешествий по всему миру. Никакого поиска и ожидания: напишите направление в Telegram-бот — менеджер за 5 минут пришлёт варианты по лучшим ценам.",
       ctaMain: "Запросить билет в Telegram", ctaCall: "Позвонить",
-      heroNote: "Менеджеры сейчас онлайн · ежедневно 9:00–21:00",
-      statYears: "лет на рынке авиабилетов", statTickets: "проданных билетов", statMin: "мин", statReply: "среднее время ответа",
-      howKicker: "Как это работает", howTitle: "Три шага — и e-билет у вас",
+      heroNote: "Менеджеры сейчас онлайн · Пн–Сб 10:00–19:00",
+      statClassVal: "Бизнес → Эконом", statClassLabel: "классы билетов", statRegions: "регионов — по всему миру", statMin: "мин", statReply: "среднее время ответа",
+      howKicker: "Как это работает", howTitle: "Три шага — и вы у цели",
       howSub: "Сайт ничего не продаёт. Всё происходит в Telegram — быстро, в живом диалоге и без лишних форм.",
       steps: [
         { title: "Напишите в бот", desc: "Отправьте направление, даты и число пассажиров. Без регистрации." },
@@ -606,8 +608,9 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
         { name: "Акмаль Т.", route: "TAS → ICN", text: "Срочно нужен был билет в Сеул в командировку. Написал утром — к обеду билет был на почте. Отлично!", time: "09:48" }
       ],
       contactKicker: "Контакты", contactTitle: "Наш офис в центре Ташкента",
-      addressLabel: "Адрес", address: "г. Ташкент, пр-т Амира Темура, 107Б (метро Бадамзар)",
-      phoneLabel: "Телефон", hoursLabel: "Режим работы", hours: "Ежедневно 9:00 – 21:00",
+      addressLabel: "Адрес", address: "г. Ташкент, Мирзо-Улугбекский р-н, ул. Муминова, 10",
+      phoneLabel: "Телефон", hoursLabel: "Режим работы", hours: "Пн–Сб 10:00 – 19:00",
+      directorLabel: "Директор", director: "Турархожаев Саидахмад Мухаммадзокир угли",
       passKicker: "ВАШ СЛЕДУЮЩИЙ РЕЙС", passTitle: "Добро пожаловать на борт — билет в одном сообщении",
       passCta: "Запросить билет",
       legalEntity: "ООО «FLIPTRAVEL»", license: "Лицензия",
@@ -615,13 +618,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     },
     en: {
       navHow: "How it works", navDest: "Destinations", navRev: "Reviews", navContact: "Contact", navCta: "Message the bot",
-      heroEyebrow: "Tashkent · Licensed air ticket agency · since 2017",
+      heroEyebrow: "Tashkent · Travel around the world",
       heroTitle1: "Fly anywhere in the world —", heroTitle2: "with a single message",
-      heroSub: "Fliptravel is an officially licensed air ticket agency. No search engines, no waiting: send your route to our Telegram bot and a manager will reply within 5 minutes with the best available fares.",
+      heroSub: "Fliptravel is an officially licensed worldwide travel agency. No search engines, no waiting: send your route to our Telegram bot and a manager will reply within 5 minutes with the best available fares.",
       ctaMain: "Request a ticket on Telegram", ctaCall: "Call us",
-      heroNote: "Managers are online now · daily 9:00–21:00",
-      statYears: "years in the air ticket market", statTickets: "tickets issued", statMin: "min", statReply: "average response time",
-      howKicker: "How it works", howTitle: "Three steps to your e-ticket",
+      heroNote: "Managers are online now · Mon–Sat 10:00–19:00",
+      statClassVal: "Business → Economy", statClassLabel: "ticket classes", statRegions: "regions, worldwide", statMin: "min", statReply: "average response time",
+      howKicker: "How it works", howTitle: "Three steps to your destination",
       howSub: "This website sells nothing. Everything happens on Telegram — fast, in a live conversation, with no forms to fill in.",
       steps: [
         { title: "Message the bot", desc: "Send your route, dates and number of passengers. No sign-up required." },
@@ -647,8 +650,9 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
         { name: "Akmal T.", route: "TAS → ICN", text: "Needed an urgent ticket to Seoul for a business trip. Messaged in the morning — the ticket was in my inbox by lunch. Excellent!", time: "09:48" }
       ],
       contactKicker: "Contact", contactTitle: "Our office in central Tashkent",
-      addressLabel: "Address", address: "107B Amir Temur Avenue, Tashkent (Bodomzor metro)",
-      phoneLabel: "Phone", hoursLabel: "Working hours", hours: "Daily 9:00 – 21:00",
+      addressLabel: "Address", address: "10 Mominov Street, Mirzo Ulugbek district, Tashkent",
+      phoneLabel: "Phone", hoursLabel: "Working hours", hours: "Mon–Sat 10:00 – 19:00",
+      directorLabel: "Director", director: "Turarkhojayev Saidakhmad Mukhammadzokir ugli",
       passKicker: "YOUR NEXT FLIGHT", passTitle: "Welcome aboard — your ticket is one message away",
       passCta: "Request a ticket",
       legalEntity: "FLIPTRAVEL LLC", license: "Licence",
