@@ -150,7 +150,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .dest-front{border:1px solid rgba(159,179,204,.14)}
 .dest-bg{position:absolute;inset:0;transform:scale(1);transition:transform 6s ease-out}
 @media (hover:hover) and (pointer:fine){.dest:hover .dest-bg{transform:scale(1.08)}}
-.dest-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,32,.05) 30%,rgba(8,17,32,.72))}
+.dest-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,32,.38) 0%,rgba(8,17,32,.12) 34%,rgba(8,17,32,.78) 100%)}
 .dest-route{position:absolute;top:20px;left:22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(234,242,252,.75)}
 .dest-code{position:absolute;top:44%;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:64px;letter-spacing:.06em;color:rgba(234,242,252,.16);transform:translateY(-50%)}
 .dest-foot{position:absolute;left:22px;right:22px;bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
@@ -676,14 +676,14 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 
   // Fallback kartalar — API mavjud bo'lmaganda ko'rsatiladi.
   var DEST_META = [
-    { code: 'SSH', price: 499, gradient: 'linear-gradient(155deg,#0E4F5A 0%,#1E8A8C 50%,#E8C583 100%)', imageUrl: null, names: { uz: ['Sharm el-Shayx', 'Misr'], ru: ['Шарм-эль-Шейх', 'Египет'], en: ['Sharm El-Sheikh', 'Egypt'] } },
-    { code: 'AYT', price: 459, gradient: 'linear-gradient(155deg,#123B63 0%,#1E6E8C 55%,#7FC6C0 100%)', imageUrl: null, names: { uz: ['Antalya', 'Turkiya'], ru: ['Анталья', 'Турция'], en: ['Antalya', 'Türkiye'] } },
-    { code: 'HKT', price: 699, gradient: 'linear-gradient(155deg,#0E4A46 0%,#1E7E6A 55%,#8FD1A0 100%)', imageUrl: null, names: { uz: ['Phuket', 'Tailand'], ru: ['Пхукет', 'Таиланд'], en: ['Phuket', 'Thailand'] } },
-    { code: 'IST', price: 389, gradient: 'linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)', imageUrl: null, names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
-    { code: 'DXB', price: 549, gradient: 'linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)', imageUrl: null, names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
-    { code: 'DOH', price: 529, gradient: 'linear-gradient(155deg,#132A54 0%,#3A4E82 55%,#C9A86A 100%)', imageUrl: null, names: { uz: ['Doha', 'Qatar'], ru: ['Доха', 'Катар'], en: ['Doha', 'Qatar'] } },
-    { code: 'PQC', price: 749, gradient: 'linear-gradient(155deg,#0C3F52 0%,#1C7E8E 55%,#7FCFB8 100%)', imageUrl: null, names: { uz: ['Fukuok', 'Vetnam'], ru: ['Фукуок', 'Вьетнам'], en: ['Phu Quoc', 'Vietnam'] } },
-    { code: 'DAD', price: 729, gradient: 'linear-gradient(155deg,#124452 0%,#2E7E7A 55%,#B7D68F 100%)', imageUrl: null, names: { uz: ['Danang', 'Vetnam'], ru: ['Дананг', 'Вьетнам'], en: ['Da Nang', 'Vietnam'] } }
+    { code: 'SSH', price: 499, gradient: 'linear-gradient(155deg,#0E4F5A 0%,#1E8A8C 50%,#E8C583 100%)', imageUrl: 'img/cards/ssh.webp', names: { uz: ['Sharm el-Shayx', 'Misr'], ru: ['Шарм-эль-Шейх', 'Египет'], en: ['Sharm El-Sheikh', 'Egypt'] } },
+    { code: 'AYT', price: 459, gradient: 'linear-gradient(155deg,#123B63 0%,#1E6E8C 55%,#7FC6C0 100%)', imageUrl: 'img/cards/ayt.webp', names: { uz: ['Antalya', 'Turkiya'], ru: ['Анталья', 'Турция'], en: ['Antalya', 'Türkiye'] } },
+    { code: 'HKT', price: 699, gradient: 'linear-gradient(155deg,#0E4A46 0%,#1E7E6A 55%,#8FD1A0 100%)', imageUrl: 'img/cards/hkt.webp', names: { uz: ['Phuket', 'Tailand'], ru: ['Пхукет', 'Таиланд'], en: ['Phuket', 'Thailand'] } },
+    { code: 'IST', price: 389, gradient: 'linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)', imageUrl: 'img/cards/ist.webp', names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
+    { code: 'DXB', price: 549, gradient: 'linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)', imageUrl: 'img/cards/dxb.webp', names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
+    { code: 'DOH', price: 529, gradient: 'linear-gradient(155deg,#132A54 0%,#3A4E82 55%,#C9A86A 100%)', imageUrl: 'img/cards/doh.webp', names: { uz: ['Doha', 'Qatar'], ru: ['Доха', 'Катар'], en: ['Doha', 'Qatar'] } },
+    { code: 'PQC', price: 749, gradient: 'linear-gradient(155deg,#0C3F52 0%,#1C7E8E 55%,#7FCFB8 100%)', imageUrl: 'img/cards/pqc.webp', names: { uz: ['Fukuok', 'Vetnam'], ru: ['Фукуок', 'Вьетнам'], en: ['Phu Quoc', 'Vietnam'] } },
+    { code: 'DAD', price: 729, gradient: 'linear-gradient(155deg,#124452 0%,#2E7E7A 55%,#B7D68F 100%)', imageUrl: 'img/cards/dad.webp', names: { uz: ['Danang', 'Vetnam'], ru: ['Дананг', 'Вьетнам'], en: ['Da Nang', 'Vietnam'] } }
   ];
 
   var AVATAR_BGS = ['#7DD3FC', '#FFB43A', '#A5B4FC', '#6EE7B7'];
