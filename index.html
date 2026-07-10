@@ -529,9 +529,16 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   };
 
   // Admin paneldan boshqariladigan kartalar API'si.
-  // API deploy qilingach shu yerga domen yoziladi, masalan: 'https://api.fliptravel.uz'
+  // Bo'sh qiymat = sayt qaysi domenda tursa, o'sha domenning /api'si (server bilan birga).
+  // GitHub Pages va file:// da API yo'q — o'rnatilgan fallback kartalar ishlatiladi.
   var PROD_API = '';
-  var SITE_API = (new URLSearchParams(location.search).get('api') || PROD_API).replace(/\/+$/, '');
+  var SITE_API = (function () {
+    var qs = new URLSearchParams(location.search).get('api');
+    if (qs !== null) return qs.replace(/\/+$/, '');
+    if (PROD_API) return PROD_API.replace(/\/+$/, '');
+    var sameOriginOk = /^https?:$/.test(location.protocol) && !/github\.io$/.test(location.hostname);
+    return sameOriginOk ? '' : null;
+  })();
 
   var TITLES = {
     uz: 'Fliptravel — aviachiptalar Telegramda',
@@ -812,7 +819,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   applyLang(state.lang, false);
 
   // ---------- Web sayt kartalari: admin panel API'sidan yuklash ----------
-  if (SITE_API) {
+  if (SITE_API !== null) {
     fetch(SITE_API + '/api/public/site-cards')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (cards) {
