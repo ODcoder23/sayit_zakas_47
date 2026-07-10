@@ -165,14 +165,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .dest-cta{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(180deg,#EDC878,#C9962E);color:#1A1204;font-weight:700;font-size:14.5px;padding:14px;border-radius:12px;transition:transform .25s var(--ease)}
 .dest-cta:hover{transform:translateY(-2px);color:#1A1204}
 .dest-hint{margin:26px 0 0;font-size:13px;color:var(--dim)}
-.bg-SSH{background:linear-gradient(155deg,#0E4F5A 0%,#1E8A8C 50%,#E8C583 100%)}
-.bg-AYT{background:linear-gradient(155deg,#123B63 0%,#1E6E8C 55%,#7FC6C0 100%)}
-.bg-HKT{background:linear-gradient(155deg,#0E4A46 0%,#1E7E6A 55%,#8FD1A0 100%)}
-.bg-IST{background:linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)}
-.bg-DXB{background:linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)}
-.bg-DOH{background:linear-gradient(155deg,#132A54 0%,#3A4E82 55%,#C9A86A 100%)}
-.bg-PQC{background:linear-gradient(155deg,#0C3F52 0%,#1C7E8E 55%,#7FCFB8 100%)}
-.bg-DAD{background:linear-gradient(155deg,#124452 0%,#2E7E7A 55%,#B7D68F 100%)}
+/* Karta fonlari admin panel/API'dan inline style sifatida keladi (fallback: DEST_META) */
 
 /* reviews */
 .rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start}
@@ -532,9 +525,13 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   'use strict';
 
   var CONFIG = {
-    bot: 'https://t.me/fliptravelbot',
-    prices: { SSH: 499, AYT: 459, HKT: 699, IST: 389, DXB: 549, DOH: 529, PQC: 749, DAD: 729 }
+    bot: 'https://t.me/fliptravelbot'
   };
+
+  // Admin paneldan boshqariladigan kartalar API'si.
+  // API deploy qilingach shu yerga domen yoziladi, masalan: 'https://api.fliptravel.uz'
+  var PROD_API = '';
+  var SITE_API = (new URLSearchParams(location.search).get('api') || PROD_API).replace(/\/+$/, '');
 
   var TITLES = {
     uz: 'Fliptravel — aviachiptalar Telegramda',
@@ -569,6 +566,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       destSub: "Narxlar mo'ljal uchun — aniq paket narxini bot 5 daqiqada aytadi. Kartani bosing yoki ustiga olib boring.",
       destFrom: "paket narxi", destRound: "TUR PAKET", destNote: "kishi boshiga, hammasi kiritilgan",
       destCta: "Botda so'rash", destHint: "* Narxlar mavsum va sanaga qarab o'zgaradi. Boshqa yo'nalish kerakmi? Botga yozing.",
+      destPriceOnRequest: "So'rov bo'yicha",
       revKicker: "Mijozlar fikri", revTitle: "Telegramdagi minglab suhbatlardan bir nechtasi",
       reviews: [
         { name: "Dilnoza R.", route: "TAS → JED · Umra", text: "4 kishiga Jidda uchun chipta oldik. Hammasi botda 20 daqiqada hal bo'ldi, narx boshqa joydagidan arzonroq chiqdi. Rahmat!", time: "14:32" },
@@ -612,6 +610,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       destSub: "Цены ориентировочные — точную цену пакета бот назовёт за 5 минут. Нажмите на карточку или наведите курсор.",
       destFrom: "цена пакета", destRound: "ТУРПАКЕТ", destNote: "за человека, всё включено",
       destCta: "Спросить в боте", destHint: "* Цены зависят от сезона и дат. Нужно другое направление? Напишите в бот.",
+      destPriceOnRequest: "По запросу",
       revKicker: "Отзывы", revTitle: "Несколько из тысяч диалогов в Telegram",
       reviews: [
         { name: "Дильноза Р.", route: "TAS → JED · Умра", text: "Брали билеты в Джидду на четверых. Всё решилось в боте за 20 минут, цена вышла ниже, чем в других местах. Спасибо!", time: "14:32" },
@@ -655,6 +654,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
       destSub: "Prices are indicative — the bot will quote an exact package price within 5 minutes. Tap or hover a card.",
       destFrom: "package from", destRound: "TOUR PACKAGE", destNote: "per person, all-inclusive",
       destCta: "Ask in the bot", destHint: "* Prices vary by season and dates. Need a different destination? Just message the bot.",
+      destPriceOnRequest: "On request",
       revKicker: "Reviews", revTitle: "A few of thousands of Telegram conversations",
       reviews: [
         { name: "Dilnoza R.", route: "TAS → JED · Umrah", text: "We booked Jeddah tickets for four. Everything was settled in the bot within 20 minutes, and the fare was lower than elsewhere. Thank you!", time: "14:32" },
@@ -674,15 +674,16 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     }
   };
 
+  // Fallback kartalar — API mavjud bo'lmaganda ko'rsatiladi.
   var DEST_META = [
-    { code: 'SSH', names: { uz: ['Sharm el-Shayx', 'Misr'], ru: ['Шарм-эль-Шейх', 'Египет'], en: ['Sharm El-Sheikh', 'Egypt'] } },
-    { code: 'AYT', names: { uz: ['Antalya', 'Turkiya'], ru: ['Анталья', 'Турция'], en: ['Antalya', 'Türkiye'] } },
-    { code: 'HKT', names: { uz: ['Phuket', 'Tailand'], ru: ['Пхукет', 'Таиланд'], en: ['Phuket', 'Thailand'] } },
-    { code: 'IST', names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
-    { code: 'DXB', names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
-    { code: 'DOH', names: { uz: ['Doha', 'Qatar'], ru: ['Доха', 'Катар'], en: ['Doha', 'Qatar'] } },
-    { code: 'PQC', names: { uz: ['Fukuok', 'Vetnam'], ru: ['Фукуок', 'Вьетнам'], en: ['Phu Quoc', 'Vietnam'] } },
-    { code: 'DAD', names: { uz: ['Danang', 'Vetnam'], ru: ['Дананг', 'Вьетнам'], en: ['Da Nang', 'Vietnam'] } }
+    { code: 'SSH', price: 499, gradient: 'linear-gradient(155deg,#0E4F5A 0%,#1E8A8C 50%,#E8C583 100%)', imageUrl: null, names: { uz: ['Sharm el-Shayx', 'Misr'], ru: ['Шарм-эль-Шейх', 'Египет'], en: ['Sharm El-Sheikh', 'Egypt'] } },
+    { code: 'AYT', price: 459, gradient: 'linear-gradient(155deg,#123B63 0%,#1E6E8C 55%,#7FC6C0 100%)', imageUrl: null, names: { uz: ['Antalya', 'Turkiya'], ru: ['Анталья', 'Турция'], en: ['Antalya', 'Türkiye'] } },
+    { code: 'HKT', price: 699, gradient: 'linear-gradient(155deg,#0E4A46 0%,#1E7E6A 55%,#8FD1A0 100%)', imageUrl: null, names: { uz: ['Phuket', 'Tailand'], ru: ['Пхукет', 'Таиланд'], en: ['Phuket', 'Thailand'] } },
+    { code: 'IST', price: 389, gradient: 'linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)', imageUrl: null, names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
+    { code: 'DXB', price: 549, gradient: 'linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)', imageUrl: null, names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
+    { code: 'DOH', price: 529, gradient: 'linear-gradient(155deg,#132A54 0%,#3A4E82 55%,#C9A86A 100%)', imageUrl: null, names: { uz: ['Doha', 'Qatar'], ru: ['Доха', 'Катар'], en: ['Doha', 'Qatar'] } },
+    { code: 'PQC', price: 749, gradient: 'linear-gradient(155deg,#0C3F52 0%,#1C7E8E 55%,#7FCFB8 100%)', imageUrl: null, names: { uz: ['Fukuok', 'Vetnam'], ru: ['Фукуок', 'Вьетнам'], en: ['Phu Quoc', 'Vietnam'] } },
+    { code: 'DAD', price: 729, gradient: 'linear-gradient(155deg,#124452 0%,#2E7E7A 55%,#B7D68F 100%)', imageUrl: null, names: { uz: ['Danang', 'Vetnam'], ru: ['Дананг', 'Вьетнам'], en: ['Da Nang', 'Vietnam'] } }
   ];
 
   var AVATAR_BGS = ['#7DD3FC', '#FFB43A', '#A5B4FC', '#6EE7B7'];
@@ -732,12 +733,14 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
     var grid = document.getElementById('destGrid');
     grid.innerHTML = DEST_META.map(function (d, i) {
       var name = d.names[lang][0], country = d.names[lang][1];
-      var price = '$' + CONFIG.prices[d.code];
-      var flipped = state.flipped[d.code] ? ' flipped' : '';
-      return '<div class="dest' + flipped + '" data-code="' + d.code + '" data-reveal data-delay="' + ((i % 3) * 90) + '" role="button" tabindex="0" aria-label="' + esc(name + ' — ' + t.destFrom + ' ' + price) + '">' +
+      var price = d.price != null ? '$' + d.price : t.destPriceOnRequest;
+      var key = 'k' + i;
+      var bg = d.imageUrl ? "url('" + esc(d.imageUrl) + "') center/cover no-repeat" : d.gradient;
+      var flipped = state.flipped[key] ? ' flipped' : '';
+      return '<div class="dest' + flipped + '" data-code="' + key + '" data-reveal data-delay="' + ((i % 3) * 90) + '" role="button" tabindex="0" aria-label="' + esc(name + ' — ' + t.destFrom + ' ' + price) + '">' +
         '<div class="dest-inner">' +
           '<div class="dest-face dest-front">' +
-            '<div class="dest-bg bg-' + d.code + '"></div>' +
+            '<div class="dest-bg" style="background:' + esc(bg) + '"></div>' +
             '<div class="dest-shade"></div>' +
             '<div class="dest-route">TAS → ' + d.code + '</div>' +
             '<div class="dest-code">' + d.code + '</div>' +
@@ -807,6 +810,31 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   });
 
   applyLang(state.lang, false);
+
+  // ---------- Web sayt kartalari: admin panel API'sidan yuklash ----------
+  if (SITE_API) {
+    fetch(SITE_API + '/api/public/site-cards')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (cards) {
+        if (!cards || !cards.length) return;
+        DEST_META = cards.map(function (c) {
+          return {
+            code: c.code,
+            price: c.price,
+            gradient: c.gradient,
+            imageUrl: c.imageUrl,
+            names: {
+              uz: [c.nameUz, c.countryUz],
+              ru: [c.nameRu, c.countryRu],
+              en: [c.nameEn, c.countryEn]
+            }
+          };
+        });
+        state.flipped = {};
+        renderDestinations(DICTS[state.lang], state.lang);
+      })
+      .catch(function () { /* API mavjud emas — fallback kartalar qoladi */ });
+  }
 
   // ---------- intro (takeoff, ≤1.2s) ----------
   var logo = document.querySelector('[data-intro-logo]');
