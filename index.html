@@ -165,12 +165,14 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 .dest-cta{display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(180deg,#EDC878,#C9962E);color:#1A1204;font-weight:700;font-size:14.5px;padding:14px;border-radius:12px;transition:transform .25s var(--ease)}
 .dest-cta:hover{transform:translateY(-2px);color:#1A1204}
 .dest-hint{margin:26px 0 0;font-size:13px;color:var(--dim)}
+.bg-SSH{background:linear-gradient(155deg,#0E4F5A 0%,#1E8A8C 50%,#E8C583 100%)}
+.bg-AYT{background:linear-gradient(155deg,#123B63 0%,#1E6E8C 55%,#7FC6C0 100%)}
+.bg-HKT{background:linear-gradient(155deg,#0E4A46 0%,#1E7E6A 55%,#8FD1A0 100%)}
 .bg-IST{background:linear-gradient(155deg,#2B3A6B 0%,#6B4A7E 55%,#C4756B 100%)}
 .bg-DXB{background:linear-gradient(155deg,#12335A 0%,#1D5C7E 55%,#D9A05B 100%)}
-.bg-MOW{background:linear-gradient(155deg,#1B2B4A 0%,#2E4A6E 60%,#7A93B5 100%)}
-.bg-JED{background:linear-gradient(155deg,#123A34 0%,#2E6B54 55%,#C9A86A 100%)}
-.bg-ICN{background:linear-gradient(155deg,#1E2B50 0%,#4A3A6E 55%,#B56B8A 100%)}
-.bg-ALA{background:linear-gradient(155deg,#14324A 0%,#2E5E6E 55%,#6BAB9C 100%)}
+.bg-DOH{background:linear-gradient(155deg,#132A54 0%,#3A4E82 55%,#C9A86A 100%)}
+.bg-PQC{background:linear-gradient(155deg,#0C3F52 0%,#1C7E8E 55%,#7FCFB8 100%)}
+.bg-DAD{background:linear-gradient(155deg,#124452 0%,#2E7E7A 55%,#B7D68F 100%)}
 
 /* reviews */
 .rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:start}
@@ -356,11 +358,12 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
         </div>
       </div>
       <div class="airlines" data-reveal data-delay="120">
-        <span>Uzbekistan Airways</span>
-        <span>Turkish Airlines</span>
-        <span class="it">flydubai</span>
+        <span>Uzairways</span>
+        <span>Centrum Air</span>
         <span>Qanot Sharq</span>
-        <span>Aeroflot</span>
+        <span>Turkish Airlines</span>
+        <span>Qatar Airways</span>
+        <span class="it">flydubai</span>
       </div>
     </div>
   </section>
@@ -530,7 +533,7 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
 
   var CONFIG = {
     bot: 'https://t.me/fliptravelbot',
-    prices: { IST: 189, DXB: 149, MOW: 129, JED: 339, ICN: 299, ALA: 89 }
+    prices: { SSH: 499, AYT: 459, HKT: 699, IST: 389, DXB: 549, DOH: 529, PQC: 749, DAD: 729 }
   };
 
   var TITLES = {
@@ -672,12 +675,14 @@ h2.title{margin:0 0 18px;font-family:'Manrope',sans-serif;font-weight:800;font-s
   };
 
   var DEST_META = [
+    { code: 'SSH', names: { uz: ['Sharm el-Shayx', 'Misr'], ru: ['Шарм-эль-Шейх', 'Египет'], en: ['Sharm El-Sheikh', 'Egypt'] } },
+    { code: 'AYT', names: { uz: ['Antalya', 'Turkiya'], ru: ['Анталья', 'Турция'], en: ['Antalya', 'Türkiye'] } },
+    { code: 'HKT', names: { uz: ['Phuket', 'Tailand'], ru: ['Пхукет', 'Таиланд'], en: ['Phuket', 'Thailand'] } },
     { code: 'IST', names: { uz: ['Istanbul', 'Turkiya'], ru: ['Стамбул', 'Турция'], en: ['Istanbul', 'Türkiye'] } },
     { code: 'DXB', names: { uz: ['Dubay', 'BAA'], ru: ['Дубай', 'ОАЭ'], en: ['Dubai', 'UAE'] } },
-    { code: 'MOW', names: { uz: ['Moskva', 'Rossiya'], ru: ['Москва', 'Россия'], en: ['Moscow', 'Russia'] } },
-    { code: 'JED', names: { uz: ['Jidda', 'Saudiya Arabistoni'], ru: ['Джидда', 'Саудовская Аравия'], en: ['Jeddah', 'Saudi Arabia'] } },
-    { code: 'ICN', names: { uz: ['Seul', 'Janubiy Koreya'], ru: ['Сеул', 'Южная Корея'], en: ['Seoul', 'South Korea'] } },
-    { code: 'ALA', names: { uz: ['Almati', 'Qozogʼiston'], ru: ['Алматы', 'Казахстан'], en: ['Almaty', 'Kazakhstan'] } }
+    { code: 'DOH', names: { uz: ['Doha', 'Qatar'], ru: ['Доха', 'Катар'], en: ['Doha', 'Qatar'] } },
+    { code: 'PQC', names: { uz: ['Fukuok', 'Vetnam'], ru: ['Фукуок', 'Вьетнам'], en: ['Phu Quoc', 'Vietnam'] } },
+    { code: 'DAD', names: { uz: ['Danang', 'Vetnam'], ru: ['Дананг', 'Вьетнам'], en: ['Da Nang', 'Vietnam'] } }
   ];
 
   var AVATAR_BGS = ['#7DD3FC', '#FFB43A', '#A5B4FC', '#6EE7B7'];
